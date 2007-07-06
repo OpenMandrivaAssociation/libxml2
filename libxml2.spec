@@ -13,21 +13,19 @@
 
 Summary:	Library providing XML and HTML support
 Name:		libxml2 
-Version:	2.6.28
+Version:	2.6.29
 Release:	%mkrel 1
 License:	MIT
 Group: 		System/Libraries
 BuildRoot:	%_tmppath/%name-%version-%release-root
 URL:		http://www.xmlsoft.org/
-Source0:	ftp://xmlsoft.org/libxml2/%{name}-%{version}.tar.bz2
+Source0:	ftp://xmlsoft.org/libxml2/%{name}-%{version}.tar.gz
 # (fc) 2.4.23-3mdk remove references to -L/usr/lib
 Patch1:		libxml2-2.4.23-libdir.patch
 BuildRequires:  gtk-doc
 BuildRequires:	python-devel >= %{py_ver}
 BuildRequires:	readline-devel
 BuildRequires:	zlib-devel
-BuildRequires:  automake1.9
-
 %description
 This library allows to manipulate XML files. It includes support 
 to read, modify and write XML and HTML files. There is DTDs support
@@ -102,8 +100,8 @@ URI library.
 %patch1 -p1 -b .libdir
 
 #fix build & needed by patch 1 
-aclocal-1.9
-automake-1.9
+aclocal-1.10
+automake-1.10
 
 # needed by patch 1
 autoconf
