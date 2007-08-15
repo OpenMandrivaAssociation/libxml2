@@ -1,20 +1,15 @@
-%define mdkversion             %(perl -pe '/(\\d+)\\.(\\d)\\.?(\\d)?/; $_="$1$2".($3||0)' /etc/mandrake-release)
-%define major	2
-%define libname	%mklibname xml %{major}
+%define name	libxml2
+%define version	2.6.29
+%define release	%mkrel 2
 
-
-%if %mdkversion >= 920
-%define py_ver      2.3
-%endif
-
-%if %mdkversion >= 1020
-%define py_ver      %pyver
-%endif
+%define major		2
+%define libname		%mklibname xml2_ %{major}
+%define develname	%mklibname xml2 -d
 
 Summary:	Library providing XML and HTML support
-Name:		libxml2 
-Version:	2.6.29
-Release:	%mkrel 1
+Name:		%{name}
+Version:	%{version}
+Release:	%{release}
 License:	MIT
 Group: 		System/Libraries
 BuildRoot:	%_tmppath/%name-%version-%release-root
@@ -23,32 +18,32 @@ Source0:	ftp://xmlsoft.org/libxml2/%{name}-%{version}.tar.gz
 # (fc) 2.4.23-3mdk remove references to -L/usr/lib
 Patch1:		libxml2-2.4.23-libdir.patch
 BuildRequires:  gtk-doc
-BuildRequires:	python-devel >= %{py_ver}
+BuildRequires:	python-devel >= %{pyver}
 BuildRequires:	readline-devel
 BuildRequires:	zlib-devel
-%description
-This library allows to manipulate XML files. It includes support 
-to read, modify and write XML and HTML files. There is DTDs support
-this includes parsing and validation even with complex DtDs, either
-at parse time or later once the document has been modified. The output
-can be a simple SAX stream or and in-memory DOM like representations.
-In this case one can use the built-in XPath and XPointer implementation
-to select subnodes or ranges. A flexible Input/Output mechanism is
-available, with existing HTTP and FTP modules and combined to an
-URI library.
+BuildRequires:	autoconf
 
-%if "%{libname}" != "%{name}"
+%description
+This library allows you to manipulate XML files. It includes support 
+for reading, modifying and writing XML and HTML files. There is DTDs 
+support: this includes parsing and validation even with complex DtDs, 
+either at parse time or later once the document has been modified. The
+output can be a simple SAX stream or and in-memory DOM-like 
+representations. In this case one can use the built-in XPath and 
+XPointer implementation to select subnodes or ranges. A flexible 
+Input/Output mechanism is available, with existing HTTP and FTP modules
+and combined to a URI library.
+
 %package -n %{libname}
-Summary:	Shard libraries providing XML and HTML support
+Summary:	SharEd libraries providing XML and HTML support
 Group: 		System/Libraries
-Provides:	%{name} = %{version}-%{release}
+Obsoletes:	%{mklibname xml 2}
 
 %description -n %{libname}
-This library allows to manipulate XML files. It includes support 
-to read, modify and write XML and HTML files. There is DTDs support
-this includes parsing and validation even with complex DtDs, either
-at parse time or later once the document has been modified.
-%endif
+This library allows you to manipulate XML files. It includes support 
+for reading, modifying and writing XML and HTML files. There is DTDs 
+support: this includes parsing and validation even with complex DtDs, 
+either at parse time or later once the document has been modified.
 
 %package utils
 Summary: Utilities to manipulate XML files
@@ -58,53 +53,43 @@ Requires: %{libname} >= %{version}
 %description utils
 This packages contains utils to manipulate XML files.
 
-%package -n %{libname}-python
+%package python
 Summary: Python bindings for the libxml2 library
 Group: Development/Python
 Requires: %{libname} >= %{version}
-Requires: python >= %{py_ver}
+Requires: python >= %{pyver}
 Provides: python-%{name} = %{version}-%{release}
 
-%description -n %{libname}-python
+%description python
 The libxml2-python package contains a module that permits applications
 written in the Python programming language to use the interface
 supplied by the libxml2 library to manipulate XML files.
 
-This library allows to manipulate XML files. It includes support 
-to read, modify and write XML and HTML files. There is DTDs support
-this includes parsing and validation even with complex DTDs, either
-at parse time or later once the document has been modified.
+This library allows you to manipulate XML files. It includes support 
+for reading, modifying and writing XML and HTML files. There is DTDs 
+support: this includes parsing and validation even with complex DtDs, 
+either at parse time or later once the document has been modified.
 
-%package -n %{libname}-devel
+%package -n %{develname}
 Summary: Libraries, includes, etc. to develop XML and HTML applications
 Group: Development/C
 Requires: %{libname} = %{version}
 Requires: zlib-devel
 Provides: %{name}-devel = %{version}-%{release}
 
-%description -n %{libname}-devel
+%description -n %{develname}
 Libraries, include files, etc you can use to develop XML applications.
-This library allows to manipulate XML files. It includes support 
-to read, modify and write XML and HTML files. There is DTDs support
-this includes parsing and validation even with complex DtDs, either
-at parse time or later once the document has been modified. The output
-can be a simple SAX stream or and in-memory DOM like representations.
-In this case one can use the built-in XPath and XPointer implementation
-to select subnodes or ranges. A flexible Input/Output mechanism is
-available, with existing HTTP and FTP modules and combined to an
-URI library.
-
+This library allows you to manipulate XML files. It includes support 
+for reading, modifying and writing XML and HTML files. There is DTDs 
+support: this includes parsing and validation even with complex DtDs, 
+either at parse time or later once the document has been modified. 
 
 %prep
 %setup -q
 %patch1 -p1 -b .libdir
 
 #fix build & needed by patch 1 
-aclocal-1.10
-automake-1.10
-
-# needed by patch 1
-autoconf
+autoreconf
 
 %build
 
@@ -134,11 +119,6 @@ then
     export CFLAGS="${RPM_OPT_FLAGS} ${PROF_USE}"
 fi
 
-%if %mdkversion <= 1000
-# don't try to update libtool on those platform
-%define __libtoolize /bin/true
-%endif
-
 %configure2_5x
 
 %make
@@ -162,7 +142,7 @@ gzip -9 doc/libxml2-api.xml
 # remove unpackaged files
 rm -rf	$RPM_BUILD_ROOT%{_prefix}/doc \
  	$RPM_BUILD_ROOT%{_datadir}/doc \
-	$RPM_BUILD_ROOT%{_libdir}/python%{py_ver}/site-packages/*.{la,a} \
+	$RPM_BUILD_ROOT%{_libdir}/python%{pyver}/site-packages/*.{la,a} \
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -172,7 +152,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n %{libname}
 %defattr(-, root, root)
-%doc AUTHORS NEWS README Copyright TODO 
 %{_libdir}/lib*.so.*
 
 %files utils
@@ -183,17 +162,17 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/xmlcatalog*
 %{_mandir}/man1/xmllint*
 
-%files -n %{libname}-python
+%files python
 %defattr(-, root, root)
 %doc AUTHORS README Copyright TODO 
 %doc doc/*.py doc/python.html
 %doc python/TODO
 %doc python/libxml2class.txt
 %doc python/tests/*.py
-%{_libdir}/python%{py_ver}/site-packages/*.so
-%{_libdir}/python%{py_ver}/site-packages/*.py
+%{_libdir}/python%{pyver}/site-packages/*.so
+%{_libdir}/python%{pyver}/site-packages/*.py
 
-%files -n %{libname}-devel
+%files -n %{develname}
 %defattr(-, root, root)
 %doc AUTHORS ChangeLog README Copyright TODO 
 %doc doc/*.html doc/*.gif doc/*.png doc/html doc/examples doc/tutorial
@@ -209,5 +188,4 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man3/*
 %{_includedir}/*
 %{_datadir}/aclocal/*
-
 
