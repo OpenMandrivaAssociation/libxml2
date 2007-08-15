@@ -1,6 +1,6 @@
 %define name	libxml2
 %define version	2.6.29
-%define release	%mkrel 2
+%define release	%mkrel 3
 
 %define major		2
 %define libname		%mklibname xml2_ %{major}
@@ -35,9 +35,10 @@ Input/Output mechanism is available, with existing HTTP and FTP modules
 and combined to a URI library.
 
 %package -n %{libname}
-Summary:	SharEd libraries providing XML and HTML support
+Summary:	Shared libraries providing XML and HTML support
 Group: 		System/Libraries
 Obsoletes:	%{mklibname xml 2}
+Provides:	%{name} = %{version}-%{release}
 
 %description -n %{libname}
 This library allows you to manipulate XML files. It includes support 
