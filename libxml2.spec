@@ -1,6 +1,6 @@
 %define name	libxml2
 %define version	2.6.29
-%define release	%mkrel 3
+%define release	%mkrel 4
 
 %define major		2
 %define libname		%mklibname xml2_ %{major}
@@ -60,6 +60,9 @@ Group: Development/Python
 Requires: %{libname} >= %{version}
 Requires: python >= %{pyver}
 Provides: python-%{name} = %{version}-%{release}
+%if "%{_lib}" != "lib"
+Obsoletes: %{_lib}xml2-python < 2.6.29-4
+%endif
 
 %description python
 The libxml2-python package contains a module that permits applications
