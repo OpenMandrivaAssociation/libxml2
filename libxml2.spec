@@ -1,6 +1,6 @@
 %define name	libxml2
 %define version	2.6.30
-%define release	%mkrel 1
+%define release	%mkrel 2
 
 %define major		2
 %define libname		%mklibname xml2_ %{major}
@@ -14,10 +14,9 @@ License:	MIT
 Group: 		System/Libraries
 BuildRoot:	%_tmppath/%name-%version-%release-root
 URL:		http://www.xmlsoft.org/
-#Source0:	ftp://xmlsoft.org/libxml2/%{name}-%{version}.tar.bz2
-Source0: http://download.gnome.org/sources/libxml2/libxml2-%version.tar.bz2
-# (fc) 2.4.23-3mdk remove references to -L/usr/lib
-Patch1:		libxml2-2.4.23-libdir.patch
+Source0:	ftp://xmlsoft.org/libxml2/%{name}-%{version}.tar.gz
+# (fc) 2.4.23-3mdk remove references to -L/usr/lib (GNOME bug #497012)
+Patch1:		libxml2-libdir.patch
 BuildRequires:  gtk-doc
 BuildRequires:	python-devel >= %{pyver}
 BuildRequires:	readline-devel
@@ -92,9 +91,6 @@ either at parse time or later once the document has been modified.
 %prep
 %setup -q
 %patch1 -p1 -b .libdir
-
-#fix build & needed by patch 1 
-autoreconf
 
 %build
 
