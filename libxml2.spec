@@ -12,6 +12,7 @@ Version:	%{version}
 Release:	%{release}
 License:	MIT
 Group: 		System/Libraries
+BuildRoot:	%_tmppath/%name-%version-%release-root
 URL:		http://www.xmlsoft.org/
 Source0:	ftp://xmlsoft.org/libxml2/%{name}-%{version}.tar.gz
 # (fc) 2.4.23-3mdk remove references to -L/usr/lib (GNOME bug #497012)
