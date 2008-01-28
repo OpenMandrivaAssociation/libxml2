@@ -1,6 +1,6 @@
 %define name	libxml2
-%define version	2.6.30
-%define release	%mkrel 3
+%define version	2.6.31
+%define release	%mkrel 1
 
 %define major		2
 %define libname		%mklibname xml2_ %{major}
@@ -17,7 +17,7 @@ URL:		http://www.xmlsoft.org/
 Source0:	ftp://xmlsoft.org/libxml2/%{name}-%{version}.tar.gz
 # (fc) 2.4.23-3mdk remove references to -L/usr/lib (GNOME bug #497012)
 Patch1:		libxml2-libdir.patch
-BuildRequires:  gtk-doc
+BuildRequires:	gtk-doc
 BuildRequires:	python-devel >= %{pyver}
 BuildRequires:	readline-devel
 BuildRequires:	zlib-devel
