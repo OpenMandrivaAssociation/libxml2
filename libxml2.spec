@@ -1,6 +1,6 @@
 %define name	libxml2
 %define version	2.6.32
-%define release	%mkrel 1
+%define release	%mkrel 2
 
 %define major		2
 %define libname		%mklibname xml2_ %{major}
