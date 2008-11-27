@@ -1,6 +1,6 @@
 %define name	libxml2
 %define version	2.7.2
-%define release	%mkrel 1
+%define release	%mkrel 2
 
 %define major		2
 %define libname		%mklibname xml2_ %{major}
@@ -15,6 +15,10 @@ Group: 		System/Libraries
 BuildRoot:	%_tmppath/%name-%version-%release-root
 URL:		http://www.xmlsoft.org/
 Source0:	ftp://xmlsoft.org/libxml2/%{name}-%{version}.tar.gz
+# (fc) 2.7.2-2mdv fix CVE-2008-4225 (SVN)
+Patch0: 	CVE-2008-4225.patch
+# (fc) 2.7.2-2mdv fix CVE-2008-4226 (SVN)
+Patch1:		CVE-2008-4226.patch
 BuildRequires:	gtk-doc
 BuildRequires:	python-devel >= %{pyver}
 BuildRequires:	readline-devel
@@ -88,6 +92,8 @@ either at parse time or later once the document has been modified.
 
 %prep
 %setup -q
+%patch0 -p0 -b .CVE-2008-4225
+%patch1 -p0 -b .CVE-2008-4226
 
 %build
 
