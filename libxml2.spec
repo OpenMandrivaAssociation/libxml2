@@ -1,6 +1,6 @@
 %define name	libxml2
-%define version	2.7.2
-%define release	%mkrel 4
+%define version	2.7.3
+%define release	%mkrel 1
 
 %define major		2
 %define libname		%mklibname xml2_ %{major}
@@ -15,10 +15,6 @@ Group: 		System/Libraries
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 URL:		http://www.xmlsoft.org/
 Source0:	ftp://xmlsoft.org/libxml2/%{name}-%{version}.tar.gz
-# (fc) 2.7.2-2mdv fix CVE-2008-4225 (SVN)
-Patch0: 	CVE-2008-4225.patch
-# (fc) 2.7.2-2mdv fix CVE-2008-4226 (SVN)
-Patch1:		CVE-2008-4226.patch
 Patch2:		libxml2-2.7.2-format_not_a_string_literal_and_no_format_arguments.diff
 BuildRequires:	gtk-doc
 BuildRequires:	python-devel >= %{pyver}
@@ -93,8 +89,6 @@ either at parse time or later once the document has been modified.
 
 %prep
 %setup -q
-%patch0 -p0 -b .CVE-2008-4225
-%patch1 -p0 -b .CVE-2008-4226
 %patch2 -p1 -b .format_not_a_string_literal_and_no_format_arguments
 
 %build
