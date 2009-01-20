@@ -15,7 +15,7 @@ Group: 		System/Libraries
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 URL:		http://www.xmlsoft.org/
 Source0:	ftp://xmlsoft.org/libxml2/%{name}-%{version}.tar.gz
-Patch2:		libxml2-2.7.2-format_not_a_string_literal_and_no_format_arguments.diff
+Patch2:		libxml2-2.7.3-format_not_a_string_literal_and_no_format_arguments.diff
 BuildRequires:	gtk-doc
 BuildRequires:	python-devel >= %{pyver}
 BuildRequires:	readline-devel
