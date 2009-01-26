@@ -1,6 +1,6 @@
 %define name	libxml2
 %define version	2.7.3
-%define release	%mkrel 1
+%define release	%mkrel 2
 
 %define major		2
 %define libname		%mklibname xml2_ %{major}
@@ -16,6 +16,7 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 URL:		http://www.xmlsoft.org/
 Source0:	ftp://xmlsoft.org/libxml2/%{name}-%{version}.tar.gz
 Patch2:		libxml2-2.7.3-format_not_a_string_literal_and_no_format_arguments.diff
+Patch3:		libxml2-2.7.3-linkage.patch
 BuildRequires:	gtk-doc
 BuildRequires:	python-devel >= %{pyver}
 BuildRequires:	readline-devel
@@ -90,6 +91,7 @@ either at parse time or later once the document has been modified.
 %prep
 %setup -q
 %patch2 -p1 -b .format_not_a_string_literal_and_no_format_arguments
+%patch3 -p0 -b .linkage
 
 %build
 
