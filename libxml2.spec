@@ -1,15 +1,11 @@
-%define name	libxml2
-%define version	2.7.3
-%define release	%mkrel 2
-
 %define major		2
 %define libname		%mklibname xml2_ %{major}
 %define develname	%mklibname xml2 -d
 
 Summary:	Library providing XML and HTML support
-Name:		%{name}
-Version:	%{version}
-Release:	%{release}
+Name:		libxml2
+Version:	2.7.3
+Release:	%mkrel 3
 License:	MIT
 Group: 		System/Libraries
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -17,6 +13,7 @@ URL:		http://www.xmlsoft.org/
 Source0:	ftp://xmlsoft.org/libxml2/%{name}-%{version}.tar.gz
 Patch2:		libxml2-2.7.3-format_not_a_string_literal_and_no_format_arguments.diff
 Patch3:		libxml2-2.7.3-linkage.patch
+Patch4:		libxml2-2.7.3-CVE-2009-2414,2416.diff
 BuildRequires:	gtk-doc
 BuildRequires:	python-devel >= %{pyver}
 BuildRequires:	readline-devel
@@ -92,6 +89,7 @@ either at parse time or later once the document has been modified.
 %setup -q
 %patch2 -p1 -b .format_not_a_string_literal_and_no_format_arguments
 %patch3 -p0 -b .linkage
+%patch4 -p0 -b .CVE-2009-2414,2416
 
 %build
 
@@ -194,4 +192,3 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man3/*
 %{_includedir}/*
 %{_datadir}/aclocal/*
-
