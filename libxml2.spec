@@ -4,16 +4,14 @@
 
 Summary:	Library providing XML and HTML support
 Name:		libxml2
-Version:	2.7.3
-Release:	%mkrel 3
+Version:	2.7.4
+Release:	%mkrel 1
 License:	MIT
 Group: 		System/Libraries
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 URL:		http://www.xmlsoft.org/
 Source0:	ftp://xmlsoft.org/libxml2/%{name}-%{version}.tar.gz
-Patch2:		libxml2-2.7.3-format_not_a_string_literal_and_no_format_arguments.diff
-Patch3:		libxml2-2.7.3-linkage.patch
-Patch4:		libxml2-2.7.3-CVE-2009-2414,2416.diff
+Patch3:		libxml2-2.7.4-python-linking.patch
 BuildRequires:	gtk-doc
 BuildRequires:	python-devel >= %{pyver}
 BuildRequires:	readline-devel
@@ -87,53 +85,28 @@ either at parse time or later once the document has been modified.
 
 %prep
 %setup -q
-%patch2 -p1 -b .format_not_a_string_literal_and_no_format_arguments
-%patch3 -p0 -b .linkage
-%patch4 -p0 -b .CVE-2009-2414,2416
+%patch3 -p1 -b .python-linking
+
+#needed by patch3
+autoreconf
 
 %build
-
-#
-# try to use compiler profiling, based on Arjan van de Ven <arjanv@redhat.com>
-# initial test spec. This really doesn't work okay for most tests done.
-#
-GCC_VERSION=`gcc --version | grep "^gcc" | awk '{ print $3 }' | sed 's+\([0-9]\)\.\([0-9]\)\..*+\1\2+'`
-if [ $GCC_VERSION -ge 34 -a $GCC_VERSION -lt 40]
-then
-    PROF_GEN='-fprofile-generate'
-    PROF_USE='-fprofile-use'
-fi
-
-if [ "$PROF_GEN" != "" ]
-then
-    # First generate a profiling version
-    CFLAGS="${RPM_OPT_FLAGS} ${PROF_GEN}" CC="" %configure2_5x
-    %make
-    # Run a few sampling
-    make dba100000.xml
-    ./xmllint --noout  dba100000.xml
-    ./xmllint --stream  dba100000.xml
-    ./xmllint --noout --valid test/valid/REC-xml-19980210.xml
-    ./xmllint --stream --valid test/valid/REC-xml-19980210.xml
-    # Then generate code based on profile
-    export CFLAGS="${RPM_OPT_FLAGS} ${PROF_USE}"
-fi
 
 %configure2_5x
 
 %make
 
-# all tests must pass
-# use TARBALLURL_2="" TARBALLURL="" TESTDIRS="" to disable xstc test which are using remote tarball
-make TARBALLURL_2="" TARBALLURL="" TESTDIRS="" check
-
 %install
 rm -rf $RPM_BUILD_ROOT
 
 %makeinstall_std
-# clean before packaging documentation
-(cd doc/examples ; make clean ; rm -rf .deps)
-gzip -9 doc/libxml2-api.xml
+
+#only do it here if check aren't done
+if [ %{_with check} -eq 0 ]; then 
+  # clean before packaging documentation
+  (cd doc/examples ; make clean ; rm -rf .deps Makefile)
+  gzip -9 doc/libxml2-api.xml
+fi
 
 
 # multiarch policy
@@ -143,6 +116,16 @@ gzip -9 doc/libxml2-api.xml
 rm -rf	$RPM_BUILD_ROOT%{_prefix}/doc \
  	$RPM_BUILD_ROOT%{_datadir}/doc \
 	$RPM_BUILD_ROOT%{_libdir}/python%{pyver}/site-packages/*.{la,a} \
+
+%check
+# all tests must pass
+# use TARBALLURL_2="" TARBALLURL="" TESTDIRS="" to disable xstc test which are using remote tarball
+make TARBALLURL_2="" TARBALLURL="" TESTDIRS="" check
+
+#need to do that after check otherwise it will fail
+# clean before packaging documentation
+(cd doc/examples ; make clean ; rm -rf .deps Makefile)
+gzip -9 doc/libxml2-api.xml
 
 %clean
 rm -rf $RPM_BUILD_ROOT
