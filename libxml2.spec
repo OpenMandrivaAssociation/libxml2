@@ -4,16 +4,13 @@
 
 Summary:	Library providing XML and HTML support
 Name:		libxml2
-Version:	2.7.4
-Release:	%mkrel 2
+Version:	2.7.6
+Release:	%mkrel 1
 License:	MIT
 Group: 		System/Libraries
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 URL:		http://www.xmlsoft.org/
 Source0:	ftp://xmlsoft.org/libxml2/%{name}-%{version}.tar.gz
-Patch3:		libxml2-2.7.4-python-linking.patch
-# (fc) 2.7.4-2mdv fix crash in inkscape (GNOME bug #566012) (GIT)
-Patch4:		libxml2-2.7.4-fixinkscape.patch
 BuildRequires:	gtk-doc
 BuildRequires:	python-devel >= %{pyver}
 BuildRequires:	readline-devel
@@ -87,11 +84,6 @@ either at parse time or later once the document has been modified.
 
 %prep
 %setup -q
-%patch3 -p1 -b .python-linking
-%patch4 -p1 -b .fixinkscape
-
-#needed by patch3
-autoreconf
 
 %build
 
