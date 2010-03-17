@@ -4,8 +4,8 @@
 
 Summary:	Library providing XML and HTML support
 Name:		libxml2
-Version:	2.7.6
-Release:	%mkrel 2
+Version:	2.7.7
+Release:	%mkrel 1
 License:	MIT
 Group: 		System/Libraries
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -15,7 +15,6 @@ BuildRequires:	gtk-doc
 BuildRequires:	python-devel >= %{pyver}
 BuildRequires:	readline-devel
 BuildRequires:	zlib-devel
-BuildRequires:	autoconf
 
 %description
 This library allows you to manipulate XML files. It includes support 
