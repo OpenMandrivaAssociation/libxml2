@@ -4,7 +4,7 @@
 
 Summary:	Library providing XML and HTML support
 Name:		libxml2
-Version:	2.7.7
+Version:	2.7.8
 Release:	%mkrel 1
 License:	MIT
 Group: 		System/Libraries
@@ -89,6 +89,9 @@ either at parse time or later once the document has been modified.
 %configure2_5x
 
 %make
+
+#%%check
+#make -f Makefile.tests check <- just barfs!
 
 %install
 rm -rf $RPM_BUILD_ROOT
