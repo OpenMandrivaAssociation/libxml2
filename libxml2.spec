@@ -5,7 +5,7 @@
 Summary:	Library providing XML and HTML support
 Name:		libxml2
 Version:	2.7.8
-Release:	%mkrel 3
+Release:	%mkrel 4
 License:	MIT
 Group: 		System/Libraries
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -13,7 +13,7 @@ URL:		http://www.xmlsoft.org/
 Source0:	ftp://xmlsoft.org/libxml2/%{name}-%{version}.tar.gz
 Patch0:		libxml2-2.7.8-reenable-version-script.patch
 BuildRequires:	gtk-doc
-BuildRequires:	python-devel >= %{pyver}
+BuildRequires:	python-devel
 BuildRequires:	readline-devel
 BuildRequires:	zlib-devel
 
@@ -43,7 +43,7 @@ either at parse time or later once the document has been modified.
 %package utils
 Summary: Utilities to manipulate XML files
 Group: System/Libraries
-Requires: %{libname} >= %{version}
+Requires: %{libname} >= %{version}-%{release}
 
 %description utils
 This packages contains utils to manipulate XML files.
@@ -51,7 +51,7 @@ This packages contains utils to manipulate XML files.
 %package python
 Summary: Python bindings for the libxml2 library
 Group: Development/Python
-Requires: %{libname} >= %{version}
+Requires: %{libname} >= %{version}-%{release}
 Requires: python >= %{pyver}
 Provides: python-%{name} = %{version}-%{release}
 %if "%{_lib}" != "lib"
@@ -71,7 +71,7 @@ either at parse time or later once the document has been modified.
 %package -n %{develname}
 Summary: Libraries, includes, etc. to develop XML and HTML applications
 Group: Development/C
-Requires: %{libname} = %{version}
+Requires: %{libname} = %{version}-%{release}
 Requires: zlib-devel
 Provides: %{name}-devel = %{version}-%{release}
 
@@ -89,11 +89,7 @@ either at parse time or later once the document has been modified.
 %build
 autoreconf -fi
 %configure2_5x
-
 %make
-
-#%%check
-#make -f Makefile.tests check <- just barfs!
 
 %install
 rm -rf $RPM_BUILD_ROOT
