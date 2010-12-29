@@ -5,13 +5,14 @@
 Summary:	Library providing XML and HTML support
 Name:		libxml2
 Version:	2.7.8
-Release:	%mkrel 4
+Release:	%mkrel 5
 License:	MIT
 Group: 		System/Libraries
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 URL:		http://www.xmlsoft.org/
 Source0:	ftp://xmlsoft.org/libxml2/%{name}-%{version}.tar.gz
 Patch0:		libxml2-2.7.8-reenable-version-script.patch
+Patch1:		libxml2-2.7.8-CVE-2010-4494.diff
 BuildRequires:	gtk-doc
 BuildRequires:	python-devel
 BuildRequires:	readline-devel
@@ -85,6 +86,7 @@ either at parse time or later once the document has been modified.
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p0 -b .CVE-2010-4494
 
 %build
 autoreconf -fi
