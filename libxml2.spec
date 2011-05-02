@@ -5,7 +5,7 @@
 Summary:	Library providing XML and HTML support
 Name:		libxml2
 Version:	2.7.8
-Release:	%mkrel 5
+Release:	%mkrel 6
 License:	MIT
 Group: 		System/Libraries
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -163,7 +163,7 @@ rm -rf $RPM_BUILD_ROOT
 %doc doc/libxml2-api.xml.gz
 %doc %{_datadir}/gtk-doc/html/*
 %{_bindir}/xml2-config
-%multiarch %{multiarch_bindir}/xml2-config
+%{multiarch_bindir}/xml2-config
 %{_libdir}/*a
 %{_libdir}/*.so
 %{_libdir}/*.sh
