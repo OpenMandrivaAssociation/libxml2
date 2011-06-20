@@ -1,3 +1,5 @@
+%define build_python 1
+
 %define major		2
 %define libname		%mklibname xml2_ %{major}
 %define develname	%mklibname xml2 -d
@@ -14,7 +16,9 @@ Source0:	ftp://xmlsoft.org/libxml2/%{name}-%{version}.tar.gz
 Patch0:		libxml2-2.7.8-reenable-version-script.patch
 Patch1:		libxml2-2.7.8-CVE-2010-4494.diff
 BuildRequires:	gtk-doc
+%if %build_python
 BuildRequires:	python-devel
+%endif 
 BuildRequires:	readline-devel
 BuildRequires:	zlib-devel
 
@@ -49,6 +53,7 @@ Requires: %{libname} >= %{version}-%{release}
 %description utils
 This packages contains utils to manipulate XML files.
 
+%if %build_python
 %package python
 Summary: Python bindings for the libxml2 library
 Group: Development/Python
@@ -68,6 +73,7 @@ This library allows you to manipulate XML files. It includes support
 for reading, modifying and writing XML and HTML files. There is DTDs 
 support: this includes parsing and validation even with complex DtDs, 
 either at parse time or later once the document has been modified.
+%endif
 
 %package -n %{develname}
 Summary: Libraries, includes, etc. to develop XML and HTML applications
@@ -146,6 +152,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/xmlcatalog*
 %{_mandir}/man1/xmllint*
 
+%if %build_python
 %files python
 %defattr(-, root, root)
 %doc AUTHORS README Copyright TODO 
@@ -155,6 +162,7 @@ rm -rf $RPM_BUILD_ROOT
 %doc python/tests/*.py
 %{_libdir}/python%{pyver}/site-packages/*.so
 %{_libdir}/python%{pyver}/site-packages/*.py
+%endif
 
 %files -n %{develname}
 %defattr(-, root, root)
