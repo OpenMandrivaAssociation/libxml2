@@ -7,7 +7,7 @@
 Summary:	Library providing XML and HTML support
 Name:		libxml2
 Version:	2.7.8
-Release:	%mkrel 6
+Release:	%mkrel 7
 License:	MIT
 Group: 		System/Libraries
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -15,6 +15,8 @@ URL:		http://www.xmlsoft.org/
 Source0:	ftp://xmlsoft.org/libxml2/%{name}-%{version}.tar.gz
 Patch0:		libxml2-2.7.8-reenable-version-script.patch
 Patch1:		libxml2-2.7.8-CVE-2010-4494.diff
+Patch2:		libxml2-2.7.8-CVE-2011-1944.diff
+Patch3:		libxml2-2.7.8-CVE-2011-2821,2834.diff
 BuildRequires:	gtk-doc
 %if %build_python
 BuildRequires:	python-devel
@@ -93,6 +95,8 @@ either at parse time or later once the document has been modified.
 %setup -q
 %patch0 -p1
 %patch1 -p0 -b .CVE-2010-4494
+%patch2 -p0 -b .CVE-2011-1944
+%patch3 -p1 -b .CVE-2011-2821,2834
 
 %build
 autoreconf -fi
@@ -132,13 +136,6 @@ gzip -9 doc/libxml2-api.xml
 
 %clean
 rm -rf $RPM_BUILD_ROOT
-
-%if %mdkversion < 200900
-%post -n %{libname} -p /sbin/ldconfig
-%endif
-%if %mdkversion < 200900
-%postun -n %{libname} -p /sbin/ldconfig
-%endif
 
 %files -n %{libname}
 %defattr(-, root, root)
