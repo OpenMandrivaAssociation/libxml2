@@ -7,7 +7,7 @@
 Summary:	Library providing XML and HTML support
 Name:		libxml2
 Version:	2.7.8
-Release:	8
+Release:	9
 License:	MIT
 Group: 		System/Libraries
 URL:		http://www.xmlsoft.org/
@@ -106,7 +106,6 @@ autoreconf -fi
 %install
 rm -rf %{buildroot}
 %makeinstall_std
-find %{buildroot} -name "*.la" -delete
 
 #only do it here if check aren't done
 if [ %{_with check} -eq 0 ]; then 
@@ -158,6 +157,7 @@ gzip -9 doc/libxml2-api.xml
 %doc %{_datadir}/gtk-doc/html/*
 %{_bindir}/xml2-config
 %{multiarch_bindir}/xml2-config
+%{_libdir}/*.la
 %{_libdir}/*.so
 %{_libdir}/*.sh
 %{_libdir}/pkgconfig/*
@@ -165,4 +165,3 @@ gzip -9 doc/libxml2-api.xml
 %{_mandir}/man3/*
 %{_includedir}/*
 %{_datadir}/aclocal/*
-
