@@ -106,6 +106,7 @@ autoreconf -fi
 %install
 rm -rf %{buildroot}
 %makeinstall_std
+rm  %{buildroot}%{_libdir}/python%{pyver}/site-packages/*.la
 
 #only do it here if check aren't done
 if [ %{_with check} -eq 0 ]; then 
