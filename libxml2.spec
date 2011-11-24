@@ -7,10 +7,9 @@
 Summary:	Library providing XML and HTML support
 Name:		libxml2
 Version:	2.7.8
-Release:	%mkrel 7
+Release:	8
 License:	MIT
 Group: 		System/Libraries
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 URL:		http://www.xmlsoft.org/
 Source0:	ftp://xmlsoft.org/libxml2/%{name}-%{version}.tar.gz
 Patch0:		libxml2-2.7.8-reenable-version-script.patch
@@ -81,7 +80,6 @@ either at parse time or later once the document has been modified.
 Summary: Libraries, includes, etc. to develop XML and HTML applications
 Group: Development/C
 Requires: %{libname} = %{version}-%{release}
-Requires: zlib-devel
 Provides: %{name}-devel = %{version}-%{release}
 
 %description -n %{develname}
@@ -100,13 +98,15 @@ either at parse time or later once the document has been modified.
 
 %build
 autoreconf -fi
-%configure2_5x
+%configure2_5x \
+	--disable-static
+
 %make
 
 %install
-rm -rf $RPM_BUILD_ROOT
-
+rm -rf %{buildroot}
 %makeinstall_std
+find %{buildroot} -name "*.la" -delete
 
 #only do it here if check aren't done
 if [ %{_with check} -eq 0 ]; then 
@@ -115,14 +115,12 @@ if [ %{_with check} -eq 0 ]; then
   gzip -9 doc/libxml2-api.xml
 fi
 
-
 # multiarch policy
-%multiarch_binaries $RPM_BUILD_ROOT%{_bindir}/xml2-config
+%multiarch_binaries %{buildroot}%{_bindir}/xml2-config
 
 # remove unpackaged files
-rm -rf	$RPM_BUILD_ROOT%{_prefix}/doc \
- 	$RPM_BUILD_ROOT%{_datadir}/doc \
-	$RPM_BUILD_ROOT%{_libdir}/python%{pyver}/site-packages/*.{la,a} \
+rm -rf	%{buildroot}%{_prefix}/doc \
+ 	%{buildroot}%{_datadir}/doc
 
 %check
 # all tests must pass
@@ -134,16 +132,10 @@ make TARBALLURL_2="" TARBALLURL="" TESTDIRS="" check
 (cd doc/examples ; make clean ; rm -rf .deps Makefile)
 gzip -9 doc/libxml2-api.xml
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
 %files -n %{libname}
-%defattr(-, root, root)
-%{_libdir}/lib*.so.*
+%{_libdir}/%{name}.so.%{major}*
 
 %files utils
-%defattr(-, root, root)
-%doc AUTHORS README Copyright TODO 
 %{_bindir}/xmlcatalog
 %{_bindir}/xmllint
 %{_mandir}/man1/xmlcatalog*
@@ -151,8 +143,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %if %build_python
 %files python
-%defattr(-, root, root)
-%doc AUTHORS README Copyright TODO 
 %doc doc/*.py doc/python.html
 %doc python/TODO
 %doc python/libxml2class.txt
@@ -162,14 +152,12 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %files -n %{develname}
-%defattr(-, root, root)
 %doc AUTHORS ChangeLog README Copyright TODO 
 %doc doc/*.html doc/*.gif doc/*.png doc/html doc/examples doc/tutorial
 %doc doc/libxml2-api.xml.gz
 %doc %{_datadir}/gtk-doc/html/*
 %{_bindir}/xml2-config
 %{multiarch_bindir}/xml2-config
-%{_libdir}/*a
 %{_libdir}/*.so
 %{_libdir}/*.sh
 %{_libdir}/pkgconfig/*
@@ -177,3 +165,4 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man3/*
 %{_includedir}/*
 %{_datadir}/aclocal/*
+
