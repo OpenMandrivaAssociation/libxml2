@@ -62,7 +62,7 @@ This packages contains utils to manipulate XML files.
 Summary: Python bindings for the libxml2 library
 Group: Development/Python
 Requires: %{libname} >= %{version}-%{release}
-Requires: python >= %{pyver}
+Requires: python >= 2.7
 Provides: python-%{name} = %{version}-%{release}
 %if "%{_lib}" != "lib"
 Obsoletes: %{_lib}xml2-python < 2.6.29-4
@@ -152,8 +152,8 @@ gzip -9 doc/libxml2-api.xml
 %doc python/TODO
 %doc python/libxml2class.txt
 %doc python/tests/*.py
-%{_libdir}/python%{pyver}/site-packages/*.so
-%{_libdir}/python%{pyver}/site-packages/*.py
+%{py_platsitedir}/*.so
+%{py_platsitedir}/*.py
 %endif
 
 %files -n %{develname}
