@@ -7,7 +7,7 @@
 Summary:	Library providing XML and HTML support
 Name:		libxml2
 Version:	2.7.8
-Release:	9
+Release:	10
 License:	MIT
 Group: 		System/Libraries
 URL:		http://www.xmlsoft.org/
@@ -34,6 +34,7 @@ XPointer implementation to select subnodes or ranges. A flexible
 Input/Output mechanism is available, with existing HTTP and FTP modules
 and combined to a URI library.
 
+#--------------------------------------------------------------------
 %package -n %{libname}
 Summary:	Shared libraries providing XML and HTML support
 Group: 		System/Libraries
@@ -46,6 +47,7 @@ for reading, modifying and writing XML and HTML files. There is DTDs
 support: this includes parsing and validation even with complex DtDs, 
 either at parse time or later once the document has been modified.
 
+#--------------------------------------------------------------------
 %package utils
 Summary: Utilities to manipulate XML files
 Group: System/Libraries
@@ -54,6 +56,7 @@ Requires: %{libname} >= %{version}-%{release}
 %description utils
 This packages contains utils to manipulate XML files.
 
+#--------------------------------------------------------------------
 %if %build_python
 %package python
 Summary: Python bindings for the libxml2 library
@@ -76,6 +79,7 @@ support: this includes parsing and validation even with complex DtDs,
 either at parse time or later once the document has been modified.
 %endif
 
+#--------------------------------------------------------------------
 %package -n %{develname}
 Summary: Libraries, includes, etc. to develop XML and HTML applications
 Group: Development/C
@@ -89,6 +93,7 @@ for reading, modifying and writing XML and HTML files. There is DTDs
 support: this includes parsing and validation even with complex DtDs, 
 either at parse time or later once the document has been modified. 
 
+#--------------------------------------------------------------------
 %prep
 %setup -q
 %patch0 -p1
@@ -106,7 +111,7 @@ autoreconf -fi
 %install
 rm -rf %{buildroot}
 %makeinstall_std
-rm  %{buildroot}%{_libdir}/python%{pyver}/site-packages/*.la
+find %{buildroot} -name \*.la|xargs rm -f
 
 #only do it here if check aren't done
 if [ %{_with check} -eq 0 ]; then 
@@ -158,7 +163,6 @@ gzip -9 doc/libxml2-api.xml
 %doc %{_datadir}/gtk-doc/html/*
 %{_bindir}/xml2-config
 %{multiarch_bindir}/xml2-config
-%{_libdir}/*.la
 %{_libdir}/*.so
 %{_libdir}/*.sh
 %{_libdir}/pkgconfig/*
