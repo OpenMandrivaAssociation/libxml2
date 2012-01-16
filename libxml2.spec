@@ -7,7 +7,7 @@
 Summary:	Library providing XML and HTML support
 Name:		libxml2
 Version:	2.7.8
-Release:	11
+Release:	12
 License:	MIT
 Group: 		System/Libraries
 URL:		http://www.xmlsoft.org/
@@ -18,6 +18,7 @@ Patch2:		libxml2-2.7.8-CVE-2011-1944.diff
 Patch3:		libxml2-2.7.8-CVE-2011-2821,2834.diff
 Patch4:		libxml2-2.7.8-CVE-2011-0216.diff
 Patch5:		libxml2-2.7.8-CVE-2011-3905.diff
+Patch6:		libxml2-2.7.8-CVE-2011-3919.diff
 BuildRequires:	gtk-doc
 %if %build_python
 BuildRequires:	python-devel
@@ -104,6 +105,7 @@ either at parse time or later once the document has been modified.
 %patch3 -p1 -b .CVE-2011-2821,2834
 %patch4 -p0 -b .CVE-2011-0216
 %patch5 -p0 -b .CVE-2011-3905
+%patch6 -p0 -b .CVE-2011-3919
 
 %build
 autoreconf -fi
