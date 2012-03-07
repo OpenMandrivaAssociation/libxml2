@@ -42,7 +42,7 @@ and combined to a URI library.
 Summary:	Shared libraries providing XML and HTML support
 Group: 		System/Libraries
 Obsoletes:	%{mklibname xml 2}
-Provides:	%{name} = %{version}-%{release}
+Provides:	%{name} = %{EVRD}
 
 %description -n	%{libname}
 This library allows you to manipulate XML files. It includes support 
@@ -53,7 +53,7 @@ either at parse time or later once the document has been modified.
 %package	utils
 Summary:	Utilities to manipulate XML files
 Group:		System/Libraries
-Requires:	%{libname} >= %{version}-%{release}
+Requires:	%{libname} = %{EVRD}
 
 %description	utils
 This packages contains utils to manipulate XML files.
@@ -62,9 +62,9 @@ This packages contains utils to manipulate XML files.
 %package	python
 Summary:	Python bindings for the libxml2 library
 Group:		Development/Python
-Requires:	%{libname} >= %{version}-%{release}
+Requires:	%{libname} = %{EVRD}
 Requires:	python >= 2.7
-Provides:	python-%{name} = %{version}-%{release}
+Provides:	python-%{name} = %{EVRD}
 %if "%{_lib}" != "lib"
 Obsoletes:	%{_lib}xml2-python < 2.6.29-4
 %endif
@@ -83,8 +83,8 @@ either at parse time or later once the document has been modified.
 %package -n	%{devname}
 Summary:	Libraries, includes, etc. to develop XML and HTML applications
 Group:		Development/C
-Requires:	%{libname} = %{version}-%{release}
-Provides:	%{name}-devel = %{version}-%{release}
+Requires:	%{libname} = %{EVRD}
+Provides:	%{name}-devel = %{EVRD}
 
 %description -n	%{devname}
 Libraries, include files, etc you can use to develop XML applications.
