@@ -62,8 +62,6 @@ This packages contains utils to manipulate XML files.
 %package	python
 Summary:	Python bindings for the libxml2 library
 Group:		Development/Python
-Requires:	%{libname} = %{EVRD}
-Requires:	python >= 2.7
 Provides:	python-%{name} = %{EVRD}
 
 %description	python
