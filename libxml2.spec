@@ -1,13 +1,13 @@
-%define build_python 1
+%bcond_without	python
 
-%define major		2
-%define libname		%mklibname xml2_ %{major}
-%define develname	%mklibname xml2 -d
+%define	major	2
+%define	libname	%mklibname xml2_ %{major}
+%define	devname	%mklibname xml2 -d
 
 Summary:	Library providing XML and HTML support
 Name:		libxml2
 Version:	2.7.8
-Release:	13
+Release:	14
 License:	MIT
 Group: 		System/Libraries
 URL:		http://www.xmlsoft.org/
@@ -21,7 +21,7 @@ Patch5:		libxml2-2.7.8-CVE-2011-3905.diff
 Patch6:		libxml2-2.7.8-CVE-2011-3919.diff
 Patch7:		libxml2-2.7.8-CVE-2012-0841.diff
 BuildRequires:	gtk-doc
-%if %build_python
+%if %{with python}
 BuildRequires:	python-devel
 %endif 
 BuildRequires:	readline-devel
@@ -38,41 +38,38 @@ XPointer implementation to select subnodes or ranges. A flexible
 Input/Output mechanism is available, with existing HTTP and FTP modules
 and combined to a URI library.
 
-#--------------------------------------------------------------------
-%package -n %{libname}
+%package -n	%{libname}
 Summary:	Shared libraries providing XML and HTML support
 Group: 		System/Libraries
 Obsoletes:	%{mklibname xml 2}
 Provides:	%{name} = %{version}-%{release}
 
-%description -n %{libname}
+%description -n	%{libname}
 This library allows you to manipulate XML files. It includes support 
 for reading, modifying and writing XML and HTML files. There is DTDs 
 support: this includes parsing and validation even with complex DtDs, 
 either at parse time or later once the document has been modified.
 
-#--------------------------------------------------------------------
-%package utils
-Summary: Utilities to manipulate XML files
-Group: System/Libraries
-Requires: %{libname} >= %{version}-%{release}
+%package	utils
+Summary:	Utilities to manipulate XML files
+Group:		System/Libraries
+Requires:	%{libname} >= %{version}-%{release}
 
-%description utils
+%description	utils
 This packages contains utils to manipulate XML files.
 
-#--------------------------------------------------------------------
-%if %build_python
-%package python
-Summary: Python bindings for the libxml2 library
-Group: Development/Python
-Requires: %{libname} >= %{version}-%{release}
-Requires: python >= 2.7
-Provides: python-%{name} = %{version}-%{release}
+%if %{with python}
+%package	python
+Summary:	Python bindings for the libxml2 library
+Group:		Development/Python
+Requires:	%{libname} >= %{version}-%{release}
+Requires:	python >= 2.7
+Provides:	python-%{name} = %{version}-%{release}
 %if "%{_lib}" != "lib"
-Obsoletes: %{_lib}xml2-python < 2.6.29-4
+Obsoletes:	%{_lib}xml2-python < 2.6.29-4
 %endif
 
-%description python
+%description	python
 The libxml2-python package contains a module that permits applications
 written in the Python programming language to use the interface
 supplied by the libxml2 library to manipulate XML files.
@@ -83,21 +80,19 @@ support: this includes parsing and validation even with complex DtDs,
 either at parse time or later once the document has been modified.
 %endif
 
-#--------------------------------------------------------------------
-%package -n %{develname}
-Summary: Libraries, includes, etc. to develop XML and HTML applications
-Group: Development/C
-Requires: %{libname} = %{version}-%{release}
-Provides: %{name}-devel = %{version}-%{release}
+%package -n	%{devname}
+Summary:	Libraries, includes, etc. to develop XML and HTML applications
+Group:		Development/C
+Requires:	%{libname} = %{version}-%{release}
+Provides:	%{name}-devel = %{version}-%{release}
 
-%description -n %{develname}
+%description -n	%{devname}
 Libraries, include files, etc you can use to develop XML applications.
 This library allows you to manipulate XML files. It includes support 
 for reading, modifying and writing XML and HTML files. There is DTDs 
 support: this includes parsing and validation even with complex DtDs, 
 either at parse time or later once the document has been modified. 
 
-#--------------------------------------------------------------------
 %prep
 %setup -q
 %patch0 -p1
@@ -117,7 +112,6 @@ autoreconf -fi
 %make
 
 %install
-rm -rf %{buildroot}
 %makeinstall_std
 find %{buildroot} -name \*.la|xargs rm -f
 
@@ -154,7 +148,7 @@ gzip -9 doc/libxml2-api.xml
 %{_mandir}/man1/xmlcatalog*
 %{_mandir}/man1/xmllint*
 
-%if %build_python
+%if %{with python}
 %files python
 %doc doc/*.py doc/python.html
 %doc python/TODO
@@ -164,7 +158,7 @@ gzip -9 doc/libxml2-api.xml
 %{py_platsitedir}/*.py
 %endif
 
-%files -n %{develname}
+%files -n %{devname}
 %doc AUTHORS ChangeLog README Copyright TODO 
 %doc doc/*.html doc/*.gif doc/*.png doc/html doc/examples doc/tutorial
 %doc doc/libxml2-api.xml.gz
