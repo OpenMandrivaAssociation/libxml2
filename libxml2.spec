@@ -108,9 +108,9 @@ either at parse time or later once the document has been modified.
 %patch5 -p0 -b .CVE-2011-3905
 %patch6 -p0 -b .CVE-2011-3919
 %patch7 -p1 -b .CVE-2012-0841
+autoreconf -fi
 
 %build
-autoreconf -fi
 %configure2_5x \
 	--disable-static
 
