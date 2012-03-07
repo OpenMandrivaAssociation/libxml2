@@ -9,7 +9,7 @@ Name:		libxml2
 Version:	2.7.8
 Release:	14
 License:	MIT
-Group: 		System/Libraries
+Group:		System/Libraries
 URL:		http://www.xmlsoft.org/
 Source0:	ftp://xmlsoft.org/libxml2/%{name}-%{version}.tar.gz
 Patch0:		libxml2-2.7.8-reenable-version-script.patch
