@@ -121,7 +121,7 @@ rm -rf	%{buildroot}%{_prefix}/doc %{buildroot}%{_datadir}/doc
 %check
 # all tests must pass
 # use TARBALLURL_2="" TARBALLURL="" TESTDIRS="" to disable xstc test which are using remote tarball
-#make TARBALLURL_2="" TARBALLURL="" TESTDIRS="" check
+make TARBALLURL_2="" TARBALLURL="" TESTDIRS="" check
 
 %files -n %{libname}
 %{_libdir}/%{name}.so.%{major}*
