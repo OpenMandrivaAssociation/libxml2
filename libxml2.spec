@@ -40,7 +40,7 @@ and combined to a URI library.
 
 %package -n	%{libname}
 Summary:	Shared libraries providing XML and HTML support
-Group: 		System/Libraries
+Group:		System/Libraries
 Obsoletes:	%{mklibname xml 2}
 Provides:	%{name} = %{EVRD}
 
@@ -116,8 +116,7 @@ find %{buildroot} -name \*.la|xargs rm -f
 %multiarch_binaries %{buildroot}%{_bindir}/xml2-config
 
 # remove unpackaged files
-rm -rf	%{buildroot}%{_prefix}/doc \
- 	%{buildroot}%{_datadir}/doc
+rm -rf	%{buildroot}%{_prefix}/doc %{buildroot}%{_datadir}/doc
 
 %check
 # all tests must pass
