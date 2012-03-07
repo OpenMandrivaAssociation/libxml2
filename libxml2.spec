@@ -150,7 +150,7 @@ make TARBALLURL_2="" TARBALLURL="" TESTDIRS="" check
 
 %files -n %{devname}
 %doc AUTHORS ChangeLog README Copyright TODO 
-%doc doc/*.html doc/*.gif doc/*.png doc/html doc/examples doc/tutorial
+%doc doc/*.html doc/*.gif doc/*.png doc/html doc/tutorial
 %doc doc/libxml2-api.xml.xz
 %doc %{_datadir}/gtk-doc/html/*
 %{_bindir}/xml2-config
