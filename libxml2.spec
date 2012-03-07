@@ -65,9 +65,6 @@ Group:		Development/Python
 Requires:	%{libname} = %{EVRD}
 Requires:	python >= 2.7
 Provides:	python-%{name} = %{EVRD}
-%if "%{_lib}" != "lib"
-Obsoletes:	%{_lib}xml2-python < 2.6.29-4
-%endif
 
 %description	python
 The libxml2-python package contains a module that permits applications
