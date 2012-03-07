@@ -111,16 +111,11 @@ autoreconf -fi
 
 %make
 
+xz --text -c doc/libxml2-api.xml > doc/libxml2-api.xml.xz
+
 %install
 %makeinstall_std
 find %{buildroot} -name \*.la|xargs rm -f
-
-#only do it here if check aren't done
-if [ %{_with check} -eq 0 ]; then 
-  # clean before packaging documentation
-  (cd doc/examples ; make clean ; rm -rf .deps Makefile)
-  gzip -9 doc/libxml2-api.xml
-fi
 
 # multiarch policy
 %multiarch_binaries %{buildroot}%{_bindir}/xml2-config
@@ -133,11 +128,6 @@ rm -rf	%{buildroot}%{_prefix}/doc \
 # all tests must pass
 # use TARBALLURL_2="" TARBALLURL="" TESTDIRS="" to disable xstc test which are using remote tarball
 make TARBALLURL_2="" TARBALLURL="" TESTDIRS="" check
-
-#need to do that after check otherwise it will fail
-# clean before packaging documentation
-(cd doc/examples ; make clean ; rm -rf .deps Makefile)
-gzip -9 doc/libxml2-api.xml
 
 %files -n %{libname}
 %{_libdir}/%{name}.so.%{major}*
@@ -161,7 +151,7 @@ gzip -9 doc/libxml2-api.xml
 %files -n %{devname}
 %doc AUTHORS ChangeLog README Copyright TODO 
 %doc doc/*.html doc/*.gif doc/*.png doc/html doc/examples doc/tutorial
-%doc doc/libxml2-api.xml.gz
+%doc doc/libxml2-api.xml.xz
 %doc %{_datadir}/gtk-doc/html/*
 %{_bindir}/xml2-config
 %{multiarch_bindir}/xml2-config
