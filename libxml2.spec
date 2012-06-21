@@ -6,26 +6,19 @@
 
 Summary:	Library providing XML and HTML support
 Name:		libxml2
-Version:	2.7.8
-Release:	14
+Version:	2.8.0
+Release:	1
 License:	MIT
 Group:		System/Libraries
 URL:		http://www.xmlsoft.org/
 Source0:	ftp://xmlsoft.org/libxml2/%{name}-%{version}.tar.gz
-Patch0:		libxml2-2.7.8-reenable-version-script.patch
-Patch1:		libxml2-2.7.8-CVE-2010-4494.diff
-Patch2:		libxml2-2.7.8-CVE-2011-1944.diff
-Patch3:		libxml2-2.7.8-CVE-2011-2821,2834.diff
-Patch4:		libxml2-2.7.8-CVE-2011-0216.diff
-Patch5:		libxml2-2.7.8-CVE-2011-3905.diff
-Patch6:		libxml2-2.7.8-CVE-2011-3919.diff
-Patch7:		libxml2-2.7.8-CVE-2012-0841.diff
 BuildRequires:	gtk-doc
 %if %{with python}
 BuildRequires:	python-devel
 %endif 
 BuildRequires:	readline-devel
 BuildRequires:	zlib-devel
+BuildRequires:	lzma-devel
 
 %description
 This library allows you to manipulate XML files. It includes support 
@@ -89,15 +82,8 @@ support: this includes parsing and validation even with complex DtDs,
 either at parse time or later once the document has been modified. 
 
 %prep
+
 %setup -q
-%patch0 -p1
-%patch1 -p0 -b .CVE-2010-4494
-%patch2 -p0 -b .CVE-2011-1944
-%patch3 -p1 -b .CVE-2011-2821,2834
-%patch4 -p0 -b .CVE-2011-0216
-%patch5 -p0 -b .CVE-2011-3905
-%patch6 -p0 -b .CVE-2011-3919
-%patch7 -p1 -b .CVE-2012-0841
 autoreconf -fi
 
 %build
