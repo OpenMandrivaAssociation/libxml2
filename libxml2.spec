@@ -7,7 +7,7 @@
 Summary:	Library providing XML and HTML support
 Name:		libxml2
 Version:	2.9.0
-Release:	1
+Release:	2
 License:	MIT
 Group:		System/Libraries
 URL:		http://www.xmlsoft.org/
@@ -15,11 +15,11 @@ Source0:	ftp://xmlsoft.org/libxml2/%{name}-%{version}.tar.gz
 Patch0:		libxml2-rand_seed.patch
 BuildRequires:	gtk-doc
 %if %{with python}
-BuildRequires:	python-devel
+BuildRequires:	pkgconfig(python2)
 %endif
 BuildRequires:	readline-devel
-BuildRequires:	zlib-devel
-BuildRequires:	lzma-devel
+BuildRequires:	pkgconfig(zlib)
+BuildRequires:	pkgconfig(liblzma)
 
 %description
 This library allows you to manipulate XML files. It includes support 
@@ -142,8 +142,10 @@ make TARBALLURL_2="" TARBALLURL="" TESTDIRS="" check
 %{_includedir}/*
 %{_datadir}/aclocal/*
 
-
 %changelog
+* Thu Jan 17 2013 Per Øyvind Karlsen <peroyvind@mandriva.org> 2.9.0-2
+- use pkgconfig() deps for buildrequires
+
 * Thu Jun 21 2012 Oden Eriksson <oeriksson@mandriva.com> 2.8.0-1
 + Revision: 806574
 - 2.8.0
