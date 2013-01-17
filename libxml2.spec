@@ -158,7 +158,7 @@ make TARBALLURL_2="" TARBALLURL="" TESTDIRS="" check
 - drop all patches as they are applied in the 2.8.0 version
 - enable lzma support
 
-* Wed Mar 07 2012 Per Ã˜yvind Karlsen <peroyvind@mandriva.org> 2.7.8-14
+* Wed Mar 07 2012 Per Øyvind Karlsen <peroyvind@mandriva.org> 2.7.8-14
 + Revision: 782657
 - rename libxml2-python to python-libxml2
 - drop explicit python & library package dependencies for python package
@@ -181,12 +181,12 @@ make TARBALLURL_2="" TARBALLURL="" TESTDIRS="" check
 + Revision: 741591
 - sync with MDVSA-2011:188
 
-* Mon Dec 05 2011 ZÃ© <ze@mandriva.org> 2.7.8-10
+* Mon Dec 05 2011 Zé <ze@mandriva.org> 2.7.8-10
 + Revision: 737977
 - fix python file list
 - clean all .la files
 
-* Thu Nov 24 2011 Per Ã˜yvind Karlsen <peroyvind@mandriva.org> 2.7.8-9
+* Thu Nov 24 2011 Per Øyvind Karlsen <peroyvind@mandriva.org> 2.7.8-9
 + Revision: 733228
 - add back .la files
 
@@ -265,7 +265,7 @@ make TARBALLURL_2="" TARBALLURL="" TESTDIRS="" check
 + Revision: 333661
 - fix linkage of python module
 
-* Tue Jan 20 2009 GÃ¶tz Waschk <waschk@mandriva.org> 2.7.3-1mdv2009.1
+* Tue Jan 20 2009 Götz Waschk <waschk@mandriva.org> 2.7.3-1mdv2009.1
 + Revision: 331728
 - update the patch again
 - update patch 2
@@ -304,7 +304,7 @@ make TARBALLURL_2="" TARBALLURL="" TESTDIRS="" check
   + Pixel <pixel@mandriva.com>
     - do not call ldconfig in %%post/%%postun, it is now handled by filetriggers
 
-* Thu Apr 10 2008 GÃ¶tz Waschk <waschk@mandriva.org> 2.6.32-1mdv2009.0
+* Thu Apr 10 2008 Götz Waschk <waschk@mandriva.org> 2.6.32-1mdv2009.0
 + Revision: 192542
 - new version
 
@@ -329,7 +329,7 @@ make TARBALLURL_2="" TARBALLURL="" TESTDIRS="" check
 - Update patch0 with improved version for upstream integration (GNOME bug #497012)
 - Fix url for source0
 
-* Tue Sep 18 2007 GÃ¶tz Waschk <waschk@mandriva.org> 2.6.30-1mdv2008.0
+* Tue Sep 18 2007 Götz Waschk <waschk@mandriva.org> 2.6.30-1mdv2008.0
 + Revision: 89538
 - new version
 
@@ -364,11 +364,11 @@ make TARBALLURL_2="" TARBALLURL="" TESTDIRS="" check
   + Helio Chissini de Castro <helio@mandriva.com>
     - Remove old source
 
-* Tue Nov 28 2006 GÃ¶tz Waschk <waschk@mandriva.org> 2.6.27-2mdv2007.1
+* Tue Nov 28 2006 Götz Waschk <waschk@mandriva.org> 2.6.27-2mdv2007.1
 + Revision: 88048
 - rebuild
 
-* Sat Oct 28 2006 GÃ¶tz Waschk <waschk@mandriva.org> 2.6.27-1mdv2007.1
+* Sat Oct 28 2006 Götz Waschk <waschk@mandriva.org> 2.6.27-1mdv2007.1
 + Revision: 73543
 - new version
 - fix source URL
@@ -385,13 +385,13 @@ make TARBALLURL_2="" TARBALLURL="" TESTDIRS="" check
 * Thu Jun 08 2006 Frederic Crozat <fcrozat@mandriva.com> 2.6.26-1mdv2007.0
 - Release 2.6.26
 
-* Wed Jun 07 2006 GÃ¶tz Waschk <waschk@mandriva.org> 2.6.25-1mdv2007.0
+* Wed Jun 07 2006 Götz Waschk <waschk@mandriva.org> 2.6.25-1mdv2007.0
 - New release 2.6.25
 
-* Sat Apr 29 2006 GÃ¶tz Waschk <waschk@mandriva.org> 2.6.24-1mdk
+* Sat Apr 29 2006 Götz Waschk <waschk@mandriva.org> 2.6.24-1mdk
 - New release 2.6.24
 
-* Thu Jan 05 2006 GÃ¶tz Waschk <waschk@mandriva.org> 2.6.23-1mdk
+* Thu Jan 05 2006 Götz Waschk <waschk@mandriva.org> 2.6.23-1mdk
 - New release 2.6.23
 - use mkrel
 
