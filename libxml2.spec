@@ -7,7 +7,7 @@
 Summary:	Library providing XML and HTML support
 Name:		libxml2
 Version:	2.9.0
-Release:	2
+Release:	3
 License:	MIT
 Group:		System/Libraries
 URL:		http://www.xmlsoft.org/
@@ -96,6 +96,9 @@ xz --text -c doc/libxml2-api.xml > doc/libxml2-api.xml.xz
 
 %install
 %makeinstall_std
+mkdir %{buildroot}/%{_lib}
+mv %{buildroot}%{_libdir}/libxml2.so.%{major}* %{buildroot}/%{_lib}
+ln -srf %{buildroot}/%{_lib}/libxml2.so.%{major}.*.* %{buildroot}%{_libdir}/libxml2.so
 
 # multiarch policy
 %multiarch_binaries %{buildroot}%{_bindir}/xml2-config
@@ -109,7 +112,7 @@ rm -rf	%{buildroot}%{_prefix}/doc %{buildroot}%{_datadir}/doc
 make TARBALLURL_2="" TARBALLURL="" TESTDIRS="" check
 
 %files -n %{libname}
-%{_libdir}/%{name}.so.%{major}*
+/%{_lib}/libxml2.so.%{major}*
 
 %files utils
 %{_bindir}/xmlcatalog
@@ -134,7 +137,7 @@ make TARBALLURL_2="" TARBALLURL="" TESTDIRS="" check
 %doc %{_datadir}/gtk-doc/html/*
 %{_bindir}/xml2-config
 %{multiarch_bindir}/xml2-config
-%{_libdir}/*.so
+%{_libdir}/libxml2.so
 %{_libdir}/*.sh
 %{_libdir}/pkgconfig/*
 %{_mandir}/man1/xml2-config*
@@ -143,6 +146,9 @@ make TARBALLURL_2="" TARBALLURL="" TESTDIRS="" check
 %{_datadir}/aclocal/*
 
 %changelog
+* Thu Jan 17 2013 Per Øyvind Karlsen <peroyvind@mandriva.org> 2.9.0-3
+- move library under /%%{_lib} as it's required by /bin/rpm
+
 * Thu Jan 17 2013 Per Øyvind Karlsen <peroyvind@mandriva.org> 2.9.0-2
 - use pkgconfig() deps for buildrequires
 
