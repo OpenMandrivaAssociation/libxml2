@@ -12,7 +12,10 @@ License:	MIT
 Group:		System/Libraries
 URL:		http://www.xmlsoft.org/
 Source0:	ftp://xmlsoft.org/libxml2/%{name}-%{version}.tar.gz
+Source1:	config.guess
+Source2:	config.sub
 Patch0:		libxml2-rand_seed.patch
+Patch1:		libxml2-aarch64.patch
 BuildRequires:	gtk-doc
 %if %{with python}
 BuildRequires:	pkgconfig(python2)
@@ -85,6 +88,7 @@ either at parse time or later once the document has been modified.
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
 
 %build
 %configure2_5x \
