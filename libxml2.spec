@@ -12,8 +12,6 @@ License:	MIT
 Group:		System/Libraries
 URL:		http://www.xmlsoft.org/
 Source0:	ftp://xmlsoft.org/libxml2/%{name}-%{version}.tar.gz
-Source1:	config.guess
-Source2:	config.sub
 Patch0:		libxml2-rand_seed.patch
 Patch1:		libxml2-aarch64.patch
 BuildRequires:	gtk-doc
