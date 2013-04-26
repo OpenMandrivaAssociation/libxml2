@@ -1,2 +1,4 @@
+removed_sources:
+  libxml2-2.9.0.tar.gz: a43d7c0a8e463ac5a7846254f2a732a9af146fab
 sources:
-  "libxml2-2.9.0.tar.gz": a43d7c0a8e463ac5a7846254f2a732a9af146fab
+  libxml2-2.9.1.tar.gz: eb3e2146c6d68aea5c2a4422ed76fe196f933c21
