@@ -101,7 +101,7 @@ either at parse time or later once the document has been modified.
 %setup -q
 
 %build
-%configure2_5x \
+%configure \
 	--disable-static
 
 %make
