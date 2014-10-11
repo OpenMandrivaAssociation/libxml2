@@ -1,4 +1,4 @@
-%bcond_without	python
+%bcond_with	python
 
 %define	major	2
 %define	libname	%mklibname xml2_ %{major}
