@@ -108,12 +108,14 @@ either at parse time or later once the document has been modified.
 
 xz --text -c doc/libxml2-api.xml > doc/libxml2-api.xml.xz
 
+%if %{with python}
 # hack to make the python module build from the source dir
 XML2_BUILD=$PWD
 ln -s include libxml2
 pushd python
 HOME=$XML2_BUILD %{__python2} setup.py build build_ext -L$XML2_BUILD/.libs
 popd
+%endif
 
 %install
 %makeinstall_std
@@ -127,10 +129,12 @@ ln -srf %{buildroot}/%{_lib}/libxml2.so.%{major}.*.* %{buildroot}%{_libdir}/libx
 # remove unpackaged files
 rm -rf	%{buildroot}%{_prefix}/doc %{buildroot}%{_datadir}/doc
 
+%if %{with python}
 XML2_BUILD=$PWD
 pushd python
 HOME=$XML2_BUILD %{__python2} setup.py install --root=%{buildroot}
 popd
+%endif
 
 %check
 # all tests must pass
