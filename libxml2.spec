@@ -7,7 +7,7 @@
 Summary:	Library providing XML and HTML support
 Name:		libxml2
 Version:	2.9.1
-Release:	10
+Release:	11
 License:	MIT
 Group:		System/Libraries
 Url:		http://www.xmlsoft.org/
