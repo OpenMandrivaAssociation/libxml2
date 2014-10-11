@@ -1,4 +1,4 @@
-%bcond_with	python
+%bcond_without	python
 
 %define	major	2
 %define	libname	%mklibname xml2_ %{major}
@@ -7,7 +7,7 @@
 Summary:	Library providing XML and HTML support
 Name:		libxml2
 Version:	2.9.1
-Release:	11
+Release:	12
 License:	MIT
 Group:		System/Libraries
 Url:		http://www.xmlsoft.org/
