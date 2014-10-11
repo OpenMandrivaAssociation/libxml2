@@ -102,6 +102,9 @@ either at parse time or later once the document has been modified.
 
 %build
 %configure \
+%if !%{with python}
+	--without-python \
+%endif
 	--disable-static
 
 %make
