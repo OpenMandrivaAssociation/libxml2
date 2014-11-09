@@ -181,6 +181,7 @@ make TARBALLURL_2="" TARBALLURL="" TESTDIRS="" check
 %{_datadir}/aclocal/*
 %{_bindir}/xml2-config
 %{multiarch_bindir}/xml2-config
+%{_libdir}/cmake/libxml2/libxml2-config.cmake
 %{_libdir}/libxml2.so
 %{_libdir}/*.sh
 %{_libdir}/pkgconfig/*
