@@ -1,13 +1,13 @@
-%bcond_without	python
+%bcond_without python
 
-%define	major	2
-%define	libname	%mklibname xml2_ %{major}
-%define	devname	%mklibname xml2 -d
+%define major 2
+%define libname %mklibname xml2_ %{major}
+%define devname %mklibname xml2 -d
 
 Summary:	Library providing XML and HTML support
 Name:		libxml2
-Version:	2.9.1
-Release:	13
+Version:	2.9.2
+Release:	1
 License:	MIT
 Group:		System/Libraries
 Url:		http://www.xmlsoft.org/
@@ -32,7 +32,7 @@ XPointer implementation to select subnodes or ranges. A flexible
 Input/Output mechanism is available, with existing HTTP and FTP modules
 and combined to a URI library.
 
-%package -n	%{libname}
+%package -n %{libname}
 Summary:	Shared libraries providing XML and HTML support
 Group:		System/Libraries
 Obsoletes:	%{mklibname xml 2} < 2.8.0
@@ -44,15 +44,15 @@ for reading, modifying and writing XML and HTML files. There is DTDs
 support: this includes parsing and validation even with complex DtDs, 
 either at parse time or later once the document has been modified.
 
-%package	utils
+%package utils
 Summary:	Utilities to manipulate XML files
 Group:		System/Libraries
 
-%description	utils
+%description utils
 This packages contains utils to manipulate XML files.
 
 %if %{with python}
-%package -n	python-%{name}
+%package -n python-%{name}
 Summary:	Python bindings for the libxml2 library
 Group:		Development/Python
 %rename		%{name}-python
@@ -67,10 +67,10 @@ for reading, modifying and writing XML and HTML files. There is DTDs
 support: this includes parsing and validation even with complex DtDs, 
 either at parse time or later once the document has been modified.
 
-%package -n     python2-%{name}
-Summary:        Python2 bindings for the libxml2 library
-Group:          Development/Python
-%rename         %{name}-python
+%package -n python2-%{name}
+Summary:	Python2 bindings for the libxml2 library
+Group:		Development/Python
+%rename		%{name}-python
 
 %description -n python2-%{name}
 The libxml2-python package contains a module that permits applications
@@ -84,7 +84,7 @@ either at parse time or later once the document has been modified.
 
 %endif
 
-%package -n	%{devname}
+%package -n %{devname}
 Summary:	Libraries, includes, etc. to develop XML and HTML applications
 Group:		Development/C
 Requires:	%{libname} = %{EVRD}
@@ -109,7 +109,7 @@ either at parse time or later once the document has been modified.
 
 %make
 
-xz --text -c doc/libxml2-api.xml > doc/libxml2-api.xml.xz
+xz --text -T0 -c doc/libxml2-api.xml > doc/libxml2-api.xml.xz
 
 %if %{with python}
 # hack to make the python module build from the source dir
@@ -162,7 +162,6 @@ make TARBALLURL_2="" TARBALLURL="" TESTDIRS="" check
 %{py_platsitedir}/*.so
 %{py_platsitedir}/*.py
 
-
 %files -n python2-%{name}
 %doc doc/*.py doc/python.html
 %doc python/TODO
@@ -188,4 +187,3 @@ make TARBALLURL_2="" TARBALLURL="" TESTDIRS="" check
 %{_includedir}/*
 %{_mandir}/man1/xml2-config*
 %{_mandir}/man3/*
-
