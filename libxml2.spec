@@ -7,11 +7,12 @@
 Summary:	Library providing XML and HTML support
 Name:		libxml2
 Version:	2.9.2
-Release:	1
+Release:	2
 License:	MIT
 Group:		System/Libraries
 Url:		http://www.xmlsoft.org/
 Source0:	ftp://xmlsoft.org/libxml2/%{name}-%{version}.tar.gz
+Patch0:		libxml2-2.9.2-catalog-revert.patch
 BuildRequires:	gtk-doc
 %if %{with python}
 BuildRequires:	pkgconfig(python3)
@@ -56,6 +57,7 @@ This packages contains utils to manipulate XML files.
 Summary:	Python bindings for the libxml2 library
 Group:		Development/Python
 %rename		%{name}-python
+Requires:	%{libname} = %{EVRD}
 
 %description -n	python-%{name}
 The libxml2-python package contains a module that permits applications
@@ -71,6 +73,7 @@ either at parse time or later once the document has been modified.
 Summary:	Python2 bindings for the libxml2 library
 Group:		Development/Python
 %rename		%{name}-python
+Requires:	%{libname} = %{EVRD}
 
 %description -n python2-%{name}
 The libxml2-python package contains a module that permits applications
@@ -81,7 +84,6 @@ This library allows you to manipulate XML files. It includes support
 for reading, modifying and writing XML and HTML files. There is DTDs
 support: this includes parsing and validation even with complex DtDs,
 either at parse time or later once the document has been modified.
-
 %endif
 
 %package -n %{devname}
@@ -99,6 +101,7 @@ either at parse time or later once the document has been modified.
 
 %prep
 %setup -q
+%apply_patches
 
 %build
 %configure \
