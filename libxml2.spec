@@ -6,8 +6,8 @@
 
 Summary:	Library providing XML and HTML support
 Name:		libxml2
-Version:	2.9.1
-Release:	3
+Version:	2.9.2
+Release:	0.1
 License:	MIT
 Group:		System/Libraries
 Url:		http://www.xmlsoft.org/
@@ -135,6 +135,7 @@ make TARBALLURL_2="" TARBALLURL="" TESTDIRS="" check
 %{_datadir}/aclocal/*
 %{_bindir}/xml2-config
 %{multiarch_bindir}/xml2-config
+%{_libdir}/cmake/libxml2/libxml2-config.cmake
 %{_libdir}/libxml2.so
 %{_libdir}/*.sh
 %{_libdir}/pkgconfig/*
