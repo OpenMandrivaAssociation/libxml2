@@ -7,11 +7,12 @@
 Summary:	Library providing XML and HTML support
 Name:		libxml2
 Version:	2.9.2
-Release:	0.1
+Release:	0.2
 License:	MIT
 Group:		System/Libraries
 Url:		http://www.xmlsoft.org/
 Source0:	ftp://xmlsoft.org/libxml2/%{name}-%{version}.tar.gz
+Patch0:		libxml2-2.9.2-catalog-revert.patch
 BuildRequires:	gtk-doc
 %if %{with python}
 BuildRequires:	pkgconfig(python2)
@@ -82,6 +83,7 @@ either at parse time or later once the document has been modified.
 
 %prep
 %setup -q
+%apply_patches
 
 %build
 %configure2_5x \
