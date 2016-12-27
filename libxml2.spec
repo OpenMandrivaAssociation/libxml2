@@ -4,10 +4,13 @@
 %define libname %mklibname xml2_ %{major}
 %define devname %mklibname xml2 -d
 
+# (tpg) optimize it a bit
+%global optflags %optflags -O3
+
 Summary:	Library providing XML and HTML support
 Name:		libxml2
-Version:	2.9.3
-Release:	3
+Version:	2.9.4
+Release:	1
 License:	MIT
 Group:		System/Libraries
 Url:		http://www.xmlsoft.org/
@@ -176,7 +179,7 @@ make TARBALLURL_2="" TARBALLURL="" TESTDIRS="" check
 %endif
 
 %files -n %{devname}
-%doc AUTHORS ChangeLog README Copyright TODO 
+%doc AUTHORS README Copyright TODO
 %doc doc/*.html doc/*.gif doc/*.png doc/html doc/tutorial
 %doc doc/libxml2-api.xml.xz
 %doc %{_datadir}/gtk-doc/html/*
