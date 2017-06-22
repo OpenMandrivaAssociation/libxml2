@@ -10,11 +10,12 @@
 Summary:	Library providing XML and HTML support
 Name:		libxml2
 Version:	2.9.4
-Release:	1
+Release:	2
 License:	MIT
 Group:		System/Libraries
 Url:		http://www.xmlsoft.org/
 Source0:	http://xmlsoft.org/sources/%{name}-%{version}.tar.gz
+Patch0:		cve-2016-9318.patch
 BuildRequires:	gtk-doc
 %if %{with python}
 BuildRequires:	pkgconfig(python3)
@@ -25,13 +26,13 @@ BuildRequires:	pkgconfig(liblzma)
 BuildRequires:	pkgconfig(zlib)
 
 %description
-This library allows you to manipulate XML files. It includes support 
-for reading, modifying and writing XML and HTML files. There is DTDs 
-support: this includes parsing and validation even with complex DtDs, 
+This library allows you to manipulate XML files. It includes support
+for reading, modifying and writing XML and HTML files. There is DTDs
+support: this includes parsing and validation even with complex DtDs,
 either at parse time or later once the document has been modified. The
-output can be a simple SAX stream or and in-memory DOM-like 
-representations. In this case one can use the built-in XPath and 
-XPointer implementation to select subnodes or ranges. A flexible 
+output can be a simple SAX stream or and in-memory DOM-like
+representations. In this case one can use the built-in XPath and
+XPointer implementation to select subnodes or ranges. A flexible
 Input/Output mechanism is available, with existing HTTP and FTP modules
 and combined to a URI library.
 
@@ -42,9 +43,9 @@ Obsoletes:	%{mklibname xml 2} < 2.8.0
 Provides:	%{name} = %{EVRD}
 
 %description -n	%{libname}
-This library allows you to manipulate XML files. It includes support 
-for reading, modifying and writing XML and HTML files. There is DTDs 
-support: this includes parsing and validation even with complex DtDs, 
+This library allows you to manipulate XML files. It includes support
+for reading, modifying and writing XML and HTML files. There is DTDs
+support: this includes parsing and validation even with complex DtDs,
 either at parse time or later once the document has been modified.
 
 %package utils
@@ -66,9 +67,9 @@ The libxml2-python package contains a module that permits applications
 written in the Python programming language to use the interface
 supplied by the libxml2 library to manipulate XML files.
 
-This library allows you to manipulate XML files. It includes support 
-for reading, modifying and writing XML and HTML files. There is DTDs 
-support: this includes parsing and validation even with complex DtDs, 
+This library allows you to manipulate XML files. It includes support
+for reading, modifying and writing XML and HTML files. There is DTDs
+support: this includes parsing and validation even with complex DtDs,
 either at parse time or later once the document has been modified.
 
 %package -n python2-%{name}
@@ -96,10 +97,10 @@ Provides:	%{name}-devel = %{EVRD}
 
 %description -n	%{devname}
 Libraries, include files, etc you can use to develop XML applications.
-This library allows you to manipulate XML files. It includes support 
-for reading, modifying and writing XML and HTML files. There is DTDs 
-support: this includes parsing and validation even with complex DtDs, 
-either at parse time or later once the document has been modified. 
+This library allows you to manipulate XML files. It includes support
+for reading, modifying and writing XML and HTML files. There is DTDs
+support: this includes parsing and validation even with complex DtDs,
+either at parse time or later once the document has been modified.
 
 %prep
 %setup -q
