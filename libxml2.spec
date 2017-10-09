@@ -132,6 +132,10 @@ mkdir %{buildroot}/%{_lib}
 mv %{buildroot}%{_libdir}/libxml2.so.%{major}* %{buildroot}/%{_lib}
 ln -srf %{buildroot}/%{_lib}/libxml2.so.%{major}.*.* %{buildroot}%{_libdir}/libxml2.so
 
+%if %{mdvver} <= 3000000
+%multiarch_binaries %{buildroot}%{_bindir}/xml2-config
+%endif
+
 # remove unpackaged files
 rm -rf	%{buildroot}%{_prefix}/doc %{buildroot}%{_datadir}/doc
 
@@ -184,6 +188,9 @@ popd
 %doc %{_datadir}/gtk-doc/html/*
 %{_datadir}/aclocal/*
 %{_bindir}/xml2-config
+%if %{mdvver} <= 3000000
+%{multiarch_bindir}/xml2-config
+%endif
 %{_libdir}/cmake/libxml2/libxml2-config.cmake
 %{_libdir}/libxml2.so
 %{_libdir}/*.sh
