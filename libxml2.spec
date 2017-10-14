@@ -10,7 +10,7 @@
 Summary:	Library providing XML and HTML support
 Name:		libxml2
 Version:	2.9.6
-Release:	1
+Release:	2
 License:	MIT
 Group:		System/Libraries
 Url:		http://www.xmlsoft.org/
@@ -24,6 +24,7 @@ BuildRequires:	pkgconfig(python)
 BuildRequires:	readline-devel
 BuildRequires:	pkgconfig(liblzma)
 BuildRequires:	pkgconfig(zlib)
+BuildRequires:	pkgconfig(icu-i18n)
 
 %description
 This library allows you to manipulate XML files. It includes support
@@ -111,7 +112,8 @@ either at parse time or later once the document has been modified.
 %if !%{with python}
 	--without-python \
 %endif
-	--disable-static
+	--disable-static \
+	--with-icu
 
 %make
 
