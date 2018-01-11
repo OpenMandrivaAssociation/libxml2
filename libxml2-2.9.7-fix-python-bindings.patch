@@ -1,0 +1,11 @@
+--- libxml2-2.9.7/python/types.c.omv~	2018-01-11 04:15:44.471716849 +0100
++++ libxml2-2.9.7/python/types.c	2018-01-11 04:17:35.426855349 +0100
+@@ -31,7 +31,7 @@ libxml_PyFileGet(PyObject *f) {
+     const char *mode;
+ 
+     fd = PyObject_AsFileDescriptor(f);
+-    if (!_PyVerify_fd(fd))
++    if (fcntl(fd, F_GETFD) == -1)
+         return(NULL);
+     /*
+      * Get the flags on the fd to understand how it was opened
