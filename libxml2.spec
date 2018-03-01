@@ -64,7 +64,7 @@ Group:		Development/Python
 %rename		%{name}-python
 Requires:	%{libname} = %{EVRD}
 
-%description -n	python-%{name}
+%description -n python-%{name}
 The libxml2-python package contains a module that permits applications
 written in the Python programming language to use the interface
 supplied by the libxml2 library to manipulate XML files.
@@ -125,7 +125,11 @@ xz --text -T0 -c doc/libxml2-api.xml > doc/libxml2-api.xml.xz
 XML2_BUILD=$PWD
 ln -s include libxml2
 pushd python
+%ifnarch %{ix86}
 HOME=$XML2_BUILD %{__python2} setup.py build build_ext -L$XML2_BUILD/.libs
+%else
+HOME=$XML2_BUILD linux32 %{__python2} setup.py build build_ext -L$XML2_BUILD/.libs
+%endif
 popd
 %endif
 
@@ -140,12 +144,16 @@ ln -srf %{buildroot}/%{_lib}/libxml2.so.%{major}.*.* %{buildroot}%{_libdir}/libx
 %endif
 
 # remove unpackaged files
-rm -rf	%{buildroot}%{_prefix}/doc %{buildroot}%{_datadir}/doc
+rm -rf %{buildroot}%{_prefix}/doc %{buildroot}%{_datadir}/doc
 
 %if %{with python}
 XML2_BUILD=$PWD
 pushd python
+%ifnarch %{ix86}
 HOME=$XML2_BUILD %{__python2} setup.py install --root=%{buildroot}
+%else
+HOME=$XML2_BUILD linux32 %{__python2} setup.py install --root=%{buildroot}
+%endif
 popd
 %endif
 
