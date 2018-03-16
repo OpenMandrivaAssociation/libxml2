@@ -10,7 +10,7 @@
 Summary:	Library providing XML and HTML support
 Name:		libxml2
 Version:	2.9.7
-Release:	4
+Release:	5
 License:	MIT
 Group:		System/Libraries
 Url:		http://www.xmlsoft.org/
@@ -172,6 +172,7 @@ popd
 %doc python/tests/*.py
 %{py_platsitedir}/*.so
 %{py_platsitedir}/*.py
+%{py_platsitedir}/*/*.pyc
 
 %files -n python2-%{name}
 %doc doc/*.py doc/python.html
@@ -179,7 +180,7 @@ popd
 %doc python/libxml2class.txt
 %doc python/tests/*.py
 %{py2_platsitedir}/*.so
-%{py2_platsitedir}/*.py
+%{py2_platsitedir}/*.py{,o,c}
 %{py2_platsitedir}/*.egg-info
 
 %endif
