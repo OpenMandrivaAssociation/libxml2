@@ -10,7 +10,7 @@
 Summary:	Library providing XML and HTML support
 Name:		libxml2
 Version:	2.9.7
-Release:	5
+Release:	6
 License:	MIT
 Group:		System/Libraries
 Url:		http://www.xmlsoft.org/
@@ -96,6 +96,8 @@ Summary:	Libraries, includes, etc. to develop XML and HTML applications
 Group:		Development/C
 Requires:	%{libname} = %{EVRD}
 Provides:	%{name}-devel = %{EVRD}
+# libxml/encoding.h #includes <unicode/ucnv.h>
+Requires:	pkgconfig(icu-i18n)
 
 %description -n	%{devname}
 Libraries, include files, etc you can use to develop XML applications.
