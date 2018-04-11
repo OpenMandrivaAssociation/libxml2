@@ -174,6 +174,7 @@ popd
 %doc python/tests/*.py
 %{py_platsitedir}/*.so
 %{py_platsitedir}/*.py*
+%{py_platsitedir}/__pycache__/*
 
 %files -n python2-%{name}
 %doc doc/*.py doc/python.html
