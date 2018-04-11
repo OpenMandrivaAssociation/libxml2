@@ -173,7 +173,7 @@ popd
 %doc python/libxml2class.txt
 %doc python/tests/*.py
 %{py_platsitedir}/*.so
-%{py_platsitedir}/*.py
+%{py_platsitedir}/*.py*
 
 %files -n python2-%{name}
 %doc doc/*.py doc/python.html
@@ -181,7 +181,7 @@ popd
 %doc python/libxml2class.txt
 %doc python/tests/*.py
 %{py2_platsitedir}/*.so
-%{py2_platsitedir}/*.py
+%{py2_platsitedir}/*.py*
 %{py2_platsitedir}/*.egg-info
 
 %endif
