@@ -127,7 +127,7 @@ xz --text -T0 -c doc/libxml2-api.xml > doc/libxml2-api.xml.xz
 XML2_BUILD=$PWD
 ln -s include libxml2
 pushd python
-HOME=$XML2_BUILD %{__python2} setup.py build build_ext -L$XML2_BUILD/.libs
+HOME=$XML2_BUILD LDSHARED="%{__cc} %{optflags} -shared -pthread" %{__python2} setup.py build build_ext -L$XML2_BUILD/.libs
 popd
 %endif
 
