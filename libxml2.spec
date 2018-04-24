@@ -21,6 +21,7 @@ BuildRequires:	gtk-doc
 %if %{with python}
 BuildRequires:	pkgconfig(python3)
 BuildRequires:	pkgconfig(python)
+BuildRequires:	gettext-devel
 %endif
 BuildRequires:	readline-devel
 BuildRequires:	pkgconfig(liblzma)
