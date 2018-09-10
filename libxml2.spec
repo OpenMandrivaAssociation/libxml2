@@ -1,4 +1,5 @@
 %bcond_without python
+%bcond_with icu
 
 %define major 2
 %define libname %mklibname xml2_ %{major}
@@ -10,7 +11,7 @@
 Summary:	Library providing XML and HTML support
 Name:		libxml2
 Version:	2.9.8
-Release:	3
+Release:	4
 License:	MIT
 Group:		System/Libraries
 Url:		http://www.xmlsoft.org/
@@ -26,7 +27,9 @@ BuildRequires:	gettext-devel
 BuildRequires:	readline-devel
 BuildRequires:	pkgconfig(liblzma)
 BuildRequires:	pkgconfig(zlib)
+%if %{with icu}
 BuildRequires:	pkgconfig(icu-i18n)
+%endif
 
 %description
 This library allows you to manipulate XML files. It includes support
@@ -97,8 +100,10 @@ Summary:	Libraries, includes, etc. to develop XML and HTML applications
 Group:		Development/C
 Requires:	%{libname} = %{EVRD}
 Provides:	%{name}-devel = %{EVRD}
+%if %{with icu}
 # libxml/encoding.h #includes <unicode/ucnv.h>
 Requires:	pkgconfig(icu-i18n)
+%endif
 # Needed because libxml2.so links to them
 Requires:	pkgconfig(liblzma)
 Requires:	pkgconfig(zlib)
@@ -120,7 +125,9 @@ either at parse time or later once the document has been modified.
 	--without-python \
 %endif
 	--disable-static \
+%if %{with icu}
 	--with-icu
+%endif
 
 %make
 
