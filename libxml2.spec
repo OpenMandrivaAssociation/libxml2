@@ -21,7 +21,7 @@ Patch0:		cve-2016-9318.patch
 BuildRequires:	gtk-doc
 %if %{with python}
 BuildRequires:	pkgconfig(python3)
-BuildRequires:	pkgconfig(python)
+BuildRequires:	pkgconfig(python2)
 BuildRequires:	gettext-devel
 %endif
 BuildRequires:	readline-devel
