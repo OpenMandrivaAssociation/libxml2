@@ -1,5 +1,6 @@
 %bcond_without python
-%bcond_without icu
+# (tpg) 2018-09-10 disable ICU support, as it looks like we and ArchLinux are one who enabling this
+%bcond_with icu
 
 %define major 2
 %define libname %mklibname xml2_ %{major}
@@ -11,7 +12,7 @@
 Summary:	Library providing XML and HTML support
 Name:		libxml2
 Version:	2.9.8
-Release:	5
+Release:	6
 License:	MIT
 Group:		System/Libraries
 Url:		http://www.xmlsoft.org/
@@ -127,6 +128,8 @@ either at parse time or later once the document has been modified.
 	--disable-static \
 %if %{with icu}
 	--with-icu
+%else
+	--without-icu
 %endif
 
 %make
