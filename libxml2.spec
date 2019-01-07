@@ -11,8 +11,8 @@
 
 Summary:	Library providing XML and HTML support
 Name:		libxml2
-Version:	2.9.8
-Release:	7
+Version:	2.9.9
+Release:	1
 License:	MIT
 Group:		System/Libraries
 Url:		http://www.xmlsoft.org/
@@ -117,8 +117,7 @@ support: this includes parsing and validation even with complex DtDs,
 either at parse time or later once the document has been modified.
 
 %prep
-%setup -q
-%apply_patches
+%autosetup -p1
 
 %build
 %configure \
@@ -132,7 +131,7 @@ either at parse time or later once the document has been modified.
 	--without-icu
 %endif
 
-%make
+%make_build
 
 xz --text -T0 -c doc/libxml2-api.xml > doc/libxml2-api.xml.xz
 
@@ -140,13 +139,13 @@ xz --text -T0 -c doc/libxml2-api.xml > doc/libxml2-api.xml.xz
 # hack to make the python module build from the source dir
 XML2_BUILD=$PWD
 ln -s include libxml2
-pushd python
+cd python
 HOME=$XML2_BUILD LDSHARED="%{__cc} %{optflags} -shared -pthread" %{__python2} setup.py build build_ext -L$XML2_BUILD/.libs
-popd
+cd -
 %endif
 
 %install
-%makeinstall_std
+%make_install
 mkdir %{buildroot}/%{_lib}
 mv %{buildroot}%{_libdir}/libxml2.so.%{major}* %{buildroot}/%{_lib}
 ln -srf %{buildroot}/%{_lib}/libxml2.so.%{major}.*.* %{buildroot}%{_libdir}/libxml2.so
@@ -156,7 +155,7 @@ ln -srf %{buildroot}/%{_lib}/libxml2.so.%{major}.*.* %{buildroot}%{_libdir}/libx
 %endif
 
 # remove unpackaged files
-rm -rf	%{buildroot}%{_prefix}/doc %{buildroot}%{_datadir}/doc
+rm -rf %{buildroot}%{_prefix}/doc %{buildroot}%{_datadir}/doc
 
 %if %{with python}
 XML2_BUILD=$PWD
