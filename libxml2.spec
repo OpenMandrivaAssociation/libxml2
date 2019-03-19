@@ -28,6 +28,9 @@ BuildRequires:	gettext-devel
 BuildRequires:	readline-devel
 BuildRequires:	pkgconfig(liblzma)
 BuildRequires:	pkgconfig(zlib)
+%ifarch riscv64
+BuildRequires:	atomic-devel
+%endif
 %if %{with icu}
 BuildRequires:	pkgconfig(icu-i18n)
 %endif
