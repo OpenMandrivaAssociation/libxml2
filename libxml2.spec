@@ -143,15 +143,16 @@ make dba100000.xml
 ./xmllint --stream  dba100000.xml
 ./xmllint --noout --valid test/valid/REC-xml-19980210.xml
 ./xmllint --stream --valid test/valid/REC-xml-19980210.xml
+unset LD_LIBRARY_PATH
+unset LLVM_PROFILE_FILE
 llvm-profdata merge --output=%{name}.profile *.profile.d
 rm -f *.profile.d
 make clean
 
 CFLAGS="%{optflags} -fprofile-instr-use=$(realpath %{name}.profile)" \
 CXXFLAGS="%{optflags} -fprofile-instr-use=$(realpath %{name}.profile)" \
-LDFLAGS="%{ldflags} -fprofile-use" \
+LDFLAGS="%{ldflags} -fprofile-instr-use=$(realpath %{name}.profile)" \
 %endif
-
 %configure \
 %if !%{with python}
 	--without-python \
