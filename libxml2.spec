@@ -2,6 +2,9 @@
 # (tpg) 2018-09-10 disable ICU support, as it looks like we and ArchLinux are one who enabling this
 %bcond_with icu
 
+# (tpg) enable PGO build
+%bcond_without pgo
+
 %define major 2
 %define libname %mklibname xml2_ %{major}
 %define devname %mklibname xml2 -d
@@ -12,7 +15,7 @@
 Summary:	Library providing XML and HTML support
 Name:		libxml2
 Version:	2.9.9
-Release:	1
+Release:	2
 License:	MIT
 Group:		System/Libraries
 Url:		http://www.xmlsoft.org/
@@ -123,6 +126,34 @@ either at parse time or later once the document has been modified.
 %autosetup -p1
 
 %build
+%if %{with pgo}
+CFLAGS_PGO="%{optflags} -fprofile-instr-generate"
+CXXFLAGS_PGO="%{optflags} -fprofile-instr-generate"
+FFLAGS_PGO="$CFLAGS_PGO"
+FCFLAGS_PGO="$CFLAGS_PGO"
+LDFLAGS_PGO="%{ldflags} -fprofile-instr-generate"
+export LLVM_PROFILE_FILE=%{name}-%p.profile.d
+export LD_LIBRARY_PATH="$(pwd)"
+
+CFLAGS="${CFLAGS_PGO}" CXXFLAGS="${CXXFLAGS_PGO}" FFLAGS="${FFLAGS_PGO}" FCFLAGS="${FCFLAGS_PGO}" LDFLAGS="${LDFLAGS_PGO}" %configure --disable-static
+%make_build
+
+make dba100000.xml
+./xmllint --noout  dba100000.xml
+./xmllint --stream  dba100000.xml
+./xmllint --noout --valid test/valid/REC-xml-19980210.xml
+./xmllint --stream --valid test/valid/REC-xml-19980210.xml
+llvm-profdata merge --output=%{name}.profile *.profile.d
+unset LLVM_PROFILE_FILE
+unset LD_LIBRARY_PATH
+rm -f *.profile.d
+make clean
+
+CFLAGS="%{optflags} -fprofile-instr-use=$(realpath %{name}.profile)" \
+CXXFLAGS="%{optflags} -fprofile-instr-use=$(realpath %{name}.profile)" \
+LDFLAGS="%{ldflags} -fprofile-use" \
+%endif
+
 %configure \
 %if !%{with python}
 	--without-python \
