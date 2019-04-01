@@ -144,8 +144,6 @@ make dba100000.xml
 ./xmllint --noout --valid test/valid/REC-xml-19980210.xml
 ./xmllint --stream --valid test/valid/REC-xml-19980210.xml
 llvm-profdata merge --output=%{name}.profile *.profile.d
-unset LLVM_PROFILE_FILE
-unset LD_LIBRARY_PATH
 rm -f *.profile.d
 make clean
 
