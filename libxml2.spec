@@ -161,7 +161,7 @@ LDFLAGS="%{ldflags} -fprofile-instr-use=$(realpath %{name}.profile)" \
 %if %{with icu}
 	--with-icu
 %else
-	--without-icu
+	--without-icu || cat config.log
 %endif
 
 %make_build
