@@ -3,7 +3,11 @@
 %bcond_with icu
 
 # (tpg) enable PGO build
+%ifnarch riscv64
 %bcond_without pgo
+%else
+%bcond_with pgo
+%endif
 
 %define major 2
 %define libname %mklibname xml2_ %{major}
