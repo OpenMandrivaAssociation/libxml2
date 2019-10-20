@@ -1,6 +1,9 @@
 %bcond_without python
-# (tpg) 2018-09-10 disable ICU support, as it looks like we and ArchLinux are one who enabling this
-%bcond_with icu
+# ICU support is needed in order for libreoffice, chromium, qtwebengine and
+# maybe others to use system libxml.
+# Please don't disable it without good reason. And if you do, fix the
+# packages that rely on it.
+%bcond_without icu
 
 # (tpg) enable PGO build
 %ifnarch riscv64
@@ -19,13 +22,14 @@
 Summary:	Library providing XML and HTML support
 Name:		libxml2
 Version:	2.9.9
-Release:	2
+Release:	3
 License:	MIT
 Group:		System/Libraries
 Url:		http://www.xmlsoft.org/
 Source0:	http://xmlsoft.org/sources/%{name}-%{version}.tar.gz
 Patch0:		cve-2016-9318.patch
 #Patch1:		libxml2-2.9.7-fix-python-bindings.patch
+Patch1:		libxml2-2.9.9-no-Lusrlib.patch
 BuildRequires:	gtk-doc
 %if %{with python}
 BuildRequires:	pkgconfig(python3)
