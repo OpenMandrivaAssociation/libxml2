@@ -27,7 +27,6 @@ License:	MIT
 Group:		System/Libraries
 Url:		http://www.xmlsoft.org/
 Source0:	http://xmlsoft.org/sources/%{name}-%{version}.tar.gz
-Patch0:		cve-2016-9318.patch
 #Patch1:		libxml2-2.9.7-fix-python-bindings.patch
 Patch1:		libxml2-2.9.9-no-Lusrlib.patch
 BuildRequires:	gtk-doc
