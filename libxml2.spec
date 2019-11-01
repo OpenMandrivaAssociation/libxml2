@@ -21,8 +21,8 @@
 
 Summary:	Library providing XML and HTML support
 Name:		libxml2
-Version:	2.9.9
-Release:	3
+Version:	2.9.10
+Release:	1
 License:	MIT
 Group:		System/Libraries
 Url:		http://www.xmlsoft.org/
@@ -36,7 +36,7 @@ BuildRequires:	pkgconfig(python3)
 BuildRequires:	pkgconfig(python2)
 BuildRequires:	gettext-devel
 %endif
-BuildRequires:	readline-devel
+BuildRequires:	pkgconfig(readline)
 BuildRequires:	pkgconfig(liblzma)
 BuildRequires:	pkgconfig(zlib)
 %ifarch riscv64
