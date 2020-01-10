@@ -22,13 +22,16 @@
 Summary:	Library providing XML and HTML support
 Name:		libxml2
 Version:	2.9.10
-Release:	2
+Release:	3
 License:	MIT
 Group:		System/Libraries
 Url:		http://www.xmlsoft.org/
 Source0:	http://xmlsoft.org/sources/%{name}-%{version}.tar.gz
 #Patch1:		libxml2-2.9.7-fix-python-bindings.patch
 Patch1:		libxml2-2.9.9-no-Lusrlib.patch
+# Patch from openSUSE.
+# See:  https://bugzilla.gnome.org/show_bug.cgi?id=789714
+Patch3:         libxml2-2.9.8-python3-unicode-errors.patch
 BuildRequires:	gtk-doc
 %if %{with python}
 BuildRequires:	pkgconfig(python3)
