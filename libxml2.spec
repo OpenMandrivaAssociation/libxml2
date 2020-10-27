@@ -40,7 +40,7 @@
 Summary:	Library providing XML and HTML support
 Name:		libxml2
 Version:	2.9.10
-Release:	5
+Release:	6
 License:	MIT
 Group:		System/Libraries
 Url:		http://www.xmlsoft.org/
@@ -58,6 +58,7 @@ Patch4:         libxml2-2.9.10-CVE-2020-7595.patch
 Patch5:         libxml2-2.9.10-parenthesize-type-checks.patch
 # https://bugzilla.redhat.com/show_bug.cgi?id=1877788
 Patch6:         libxml2-2.9.10-CVE-2020-24977.patch
+Patch7:		libxml2-2.9.10-icu-68.patch
 BuildRequires:	gtk-doc
 %if %{with python}
 BuildRequires:	pkgconfig(python3)
