@@ -49,7 +49,15 @@ Source0:	http://xmlsoft.org/sources/%{name}-%{version}.tar.gz
 Patch1:		libxml2-2.9.9-no-Lusrlib.patch
 # Patch from openSUSE.
 # See:  https://bugzilla.gnome.org/show_bug.cgi?id=789714
-Patch3:         libxml2-2.9.8-python3-unicode-errors.patch
+Patch2:         libxml2-2.9.8-python3-unicode-errors.patch
+# https://gitlab.gnome.org/GNOME/libxml2/merge_requests/68
+Patch3:         libxml2-2.9.10-CVE-2019-20388.patch
+# https://gitlab.gnome.org/GNOME/libxml2/merge_requests/63
+Patch4:         libxml2-2.9.10-CVE-2020-7595.patch
+# https://gitlab.gnome.org/GNOME/libxml2/merge_requests/71
+Patch5:         libxml2-2.9.10-parenthesize-type-checks.patch
+# https://bugzilla.redhat.com/show_bug.cgi?id=1877788
+Patch6:         libxml2-2.9.10-CVE-2020-24977.patch
 BuildRequires:	gtk-doc
 %if %{with python}
 BuildRequires:	pkgconfig(python3)
