@@ -35,30 +35,18 @@
 %endif
 
 # (tpg) optimize it a bit
-%global optflags %optflags -O3
+%global optflags %{optflags} -O3
 
 Summary:	Library providing XML and HTML support
 Name:		libxml2
-Version:	2.9.10
-Release:	6
+Version:	2.9.12
+Release:	1
 License:	MIT
 Group:		System/Libraries
 Url:		http://www.xmlsoft.org/
 Source0:	http://xmlsoft.org/sources/%{name}-%{version}.tar.gz
-#Patch1:		libxml2-2.9.7-fix-python-bindings.patch
 Patch1:		libxml2-2.9.9-no-Lusrlib.patch
-# Patch from openSUSE.
-# See:  https://bugzilla.gnome.org/show_bug.cgi?id=789714
-Patch2:         libxml2-2.9.8-python3-unicode-errors.patch
-# https://gitlab.gnome.org/GNOME/libxml2/merge_requests/68
-Patch3:         libxml2-2.9.10-CVE-2019-20388.patch
-# https://gitlab.gnome.org/GNOME/libxml2/merge_requests/63
-Patch4:         libxml2-2.9.10-CVE-2020-7595.patch
-# https://gitlab.gnome.org/GNOME/libxml2/merge_requests/71
-Patch5:         libxml2-2.9.10-parenthesize-type-checks.patch
-# https://bugzilla.redhat.com/show_bug.cgi?id=1877788
-Patch6:         libxml2-2.9.10-CVE-2020-24977.patch
-Patch7:		libxml2-2.9.10-icu-68.patch
+Patch2:		https://src.fedoraproject.org/rpms/libxml2/raw/rawhide/f/libxml2-2.9.8-python3-unicode-errors.patch
 BuildRequires:	gtk-doc
 %if %{with python}
 BuildRequires:	pkgconfig(python3)
@@ -100,7 +88,7 @@ Group:		System/Libraries
 Obsoletes:	%{mklibname xml 2} < 2.8.0
 Provides:	%{name} = %{EVRD}
 
-%description -n	%{libname}
+%description -n %{libname}
 This library allows you to manipulate XML files. It includes support
 for reading, modifying and writing XML and HTML files. There is DTDs
 support: this includes parsing and validation even with complex DtDs,
@@ -119,7 +107,7 @@ Requires:	pkgconfig(icu-i18n)
 Requires:	pkgconfig(liblzma)
 Requires:	pkgconfig(zlib)
 
-%description -n	%{devname}
+%description -n %{devname}
 Libraries, include files, etc you can use to develop XML applications.
 This library allows you to manipulate XML files. It includes support
 for reading, modifying and writing XML and HTML files. There is DTDs
@@ -131,7 +119,7 @@ either at parse time or later once the document has been modified.
 Summary:	Shared libraries providing XML and HTML support (32-bit)
 Group:		System/Libraries
 
-%description -n	%{lib32name}
+%description -n %{lib32name}
 This library allows you to manipulate XML files. It includes support
 for reading, modifying and writing XML and HTML files. There is DTDs
 support: this includes parsing and validation even with complex DtDs,
@@ -146,7 +134,7 @@ Requires:	%{devname} = %{EVRD}
 Requires:	pkgconfig(liblzma)
 Requires:	devel(libz)
 
-%description -n	%{dev32name}
+%description -n %{dev32name}
 Libraries, include files, etc you can use to develop XML applications.
 This library allows you to manipulate XML files. It includes support
 for reading, modifying and writing XML and HTML files. There is DTDs
@@ -168,7 +156,7 @@ Group:		Development/Python
 %rename		%{name}-python
 Requires:	%{libname} = %{EVRD}
 
-%description -n	python-%{name}
+%description -n python-%{name}
 The libxml2-python package contains a module that permits applications
 written in the Python programming language to use the interface
 supplied by the libxml2 library to manipulate XML files.
@@ -181,8 +169,9 @@ either at parse time or later once the document has been modified.
 
 %prep
 %autosetup -p1
+
 %if %{with compat32}
-export CONFIGURE_TOP="`pwd`"
+export CONFIGURE_TOP="$(pwd)"
 mkdir build32
 cd build32
 %configure32 \
@@ -196,7 +185,7 @@ cd build32
 %make_build -C build32
 %endif
 
-export CONFIGURE_TOP="`pwd`"
+export CONFIGURE_TOP="$(pwd)"
 mkdir build
 cd build
 %if %{with pgo}
