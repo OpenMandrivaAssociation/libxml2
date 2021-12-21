@@ -14,11 +14,7 @@
 %bcond_without icu
 
 # (tpg) enable PGO build
-%ifnarch riscv64
-%bcond_with pgo
-%else
-%bcond_with pgo
-%endif
+%bcond_without pgo
 
 %define major 2
 %define libname %mklibname xml2_ %{major}
@@ -40,7 +36,7 @@
 Summary:	Library providing XML and HTML support
 Name:		libxml2
 Version:	2.9.12
-Release:	1
+Release:	2
 License:	MIT
 Group:		System/Libraries
 Url:		http://www.xmlsoft.org/
@@ -189,15 +185,12 @@ export CONFIGURE_TOP="$(pwd)"
 mkdir build
 cd build
 %if %{with pgo}
-CFLAGS_PGO="%{optflags} -flto -fprofile-instr-generate"
-CXXFLAGS_PGO="%{optflags} -flto -fprofile-instr-generate"
-FFLAGS_PGO="$CFLAGS_PGO"
-FCFLAGS_PGO="$CFLAGS_PGO"
-LDFLAGS_PGO="%{ldflags} -flto -fprofile-instr-generate"
-export LLVM_PROFILE_FILE=%{name}-%p.profile.d
 export LD_LIBRARY_PATH="$(pwd)"
 
-CFLAGS="${CFLAGS_PGO}" CXXFLAGS="${CXXFLAGS_PGO}" FFLAGS="${FFLAGS_PGO}" FCFLAGS="${FCFLAGS_PGO}" LDFLAGS="${LDFLAGS_PGO}" %configure --disable-static
+CFLAGS="%{optflags} -flto -fprofile-generate" \
+CXXFLAGS="%{optflags} -flto -fprofile-generate" \
+LDFLAGS="%{build_ldflags} -flto -fprofile-generate" \
+%configure --disable-static
 %make_build
 
 make dba100000.xml
@@ -206,18 +199,19 @@ make dba100000.xml
 ./xmllint --noout --valid ../test/valid/REC-xml-19980210.xml
 ./xmllint --stream --valid ../test/valid/REC-xml-19980210.xml
 unset LD_LIBRARY_PATH
-unset LLVM_PROFILE_FILE
-llvm-profdata merge --output=%{name}.profile *.profile.d
-rm -f *.profile.d
+llvm-profdata merge --output=%{name}-llvm.profdata $(find . -name "*.profraw" -type f)
+PROFDATA="$(realpath %{name}-llvm.profdata)"
+rm -f *.profraw
+
 make clean
 
-CFLAGS="%{optflags} -flto -fprofile-instr-use=$(realpath %{name}.profile)" \
-CXXFLAGS="%{optflags} -flto -fprofile-instr-use=$(realpath %{name}.profile)" \
-LDFLAGS="%{ldflags} -flto -fprofile-instr-use=$(realpath %{name}.profile)" \
+CFLAGS="%{optflags} -flto -fprofile-use=$PROFDATA" \
+CXXFLAGS="%{optflags} -flto -fprofile-use=$PROFDATA" \
+LDFLAGS="%{build_ldflags} -flto -fprofile-use=$PROFDATA" \
 %else
 CFLAGS="%{optflags} -flto" \
 CXXFLAGS="%{optflags} -flto" \
-LDFLAGS="%{ldflags} -flto" \
+LDFLAGS="%{build_ldflags} -flto" \
 %endif
 %configure \
 %if !%{with python}
@@ -239,9 +233,6 @@ xz --text -T0 -c ../doc/libxml2-api.xml > ../doc/libxml2-api.xml.xz
 %make_install -C build32
 %endif
 %make_install -C build
-mkdir %{buildroot}/%{_lib}
-mv %{buildroot}%{_libdir}/libxml2.so.%{major}* %{buildroot}/%{_lib}
-ln -srf %{buildroot}/%{_lib}/libxml2.so.%{major}.*.* %{buildroot}%{_libdir}/libxml2.so
 
 # remove unpackaged files
 rm -rf %{buildroot}%{_prefix}/doc %{buildroot}%{_datadir}/doc
@@ -253,13 +244,13 @@ rm -rf %{buildroot}%{_prefix}/doc %{buildroot}%{_datadir}/doc
 #make TARBALLURL_2="" TARBALLURL="" TESTDIRS="" check
 
 %files -n %{libname}
-/%{_lib}/libxml2.so.%{major}*
+%{_libdir}/libxml2.so.%{major}*
 
 %files utils
 %{_bindir}/xmlcatalog
 %{_bindir}/xmllint
-%{_mandir}/man1/xmlcatalog*
-%{_mandir}/man1/xmllint*
+%doc %{_mandir}/man1/xmlcatalog*
+%doc %{_mandir}/man1/xmllint*
 
 %if %{with python}
 %files -n python-%{name}
@@ -284,8 +275,8 @@ rm -rf %{buildroot}%{_prefix}/doc %{buildroot}%{_datadir}/doc
 %{_libdir}/*.sh
 %{_libdir}/pkgconfig/*
 %{_includedir}/*
-%{_mandir}/man1/xml2-config*
-%{_mandir}/man3/*
+%doc %{_mandir}/man1/xml2-config*
+%doc %{_mandir}/man3/*
 
 %if %{with compat32}
 %files -n %{lib32name}
