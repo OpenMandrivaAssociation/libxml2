@@ -36,7 +36,7 @@
 Summary:	Library providing XML and HTML support
 Name:		libxml2
 Version:	2.9.12
-Release:	3
+Release:	4
 License:	MIT
 Group:		System/Libraries
 Url:		http://www.xmlsoft.org/
@@ -260,7 +260,6 @@ rm -rf %{buildroot}%{_prefix}/doc %{buildroot}%{_datadir}/doc
 %doc python/tests/*.py
 %{py_platsitedir}/*.so
 %{py_platsitedir}/*.py*
-%{py_platsitedir}/__pycache__/*
 %endif
 
 %files -n %{devname}
