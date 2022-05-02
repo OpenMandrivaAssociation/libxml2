@@ -264,7 +264,7 @@ rm -rf %{buildroot}%{_prefix}/doc %{buildroot}%{_datadir}/doc
 %endif
 
 %files -n %{devname}
-%doc AUTHORS README Copyright TODO
+%doc README* Copyright TODO
 %doc doc/*.html doc/*.gif doc/*.png doc/html doc/tutorial
 %doc doc/libxml2-api.xml.xz
 %doc %{_datadir}/gtk-doc/html/*
