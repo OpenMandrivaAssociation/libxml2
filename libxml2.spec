@@ -35,12 +35,12 @@
 
 Summary:	Library providing XML and HTML support
 Name:		libxml2
-Version:	2.9.14
+Version:	2.10.3
 Release:	1
 License:	MIT
 Group:		System/Libraries
 Url:		http://www.xmlsoft.org/
-Source0:	https://download.gnome.org/sources/libxml2/2.9/libxml2-%{version}.tar.xz
+Source0:	https://download.gnome.org/sources/libxml2/%(echo %{version}|cut -d. -f1-2)/libxml2-%{version}.tar.xz
 #Source0:	http://xmlsoft.org/sources/%{name}-%{version}.tar.gz
 Patch1:		libxml2-2.9.9-no-Lusrlib.patch
 Patch2:		https://src.fedoraproject.org/rpms/libxml2/raw/rawhide/f/libxml2-2.9.8-python3-unicode-errors.patch
@@ -255,28 +255,24 @@ rm -rf %{buildroot}%{_prefix}/doc %{buildroot}%{_datadir}/doc
 
 %if %{with python}
 %files -n python-%{name}
-%doc doc/*.py doc/python.html
 %doc python/TODO
-%doc python/libxml2class.txt
 %doc python/tests/*.py
 %{py_platsitedir}/*.so
-%{py_platsitedir}/*.py*
+%{py_puresitedir}/__pycache__
+%{py_puresitedir}/*.py
 %endif
 
 %files -n %{devname}
 %doc README* Copyright TODO
-%doc doc/*.html doc/*.gif doc/*.png doc/html doc/tutorial
 %doc doc/libxml2-api.xml.xz
 %doc %{_datadir}/gtk-doc/html/*
 %{_datadir}/aclocal/*
 %{_bindir}/xml2-config
 %{_libdir}/cmake/libxml2/libxml2-config.cmake
 %{_libdir}/libxml2.so
-%{_libdir}/*.sh
 %{_libdir}/pkgconfig/*
 %{_includedir}/*
 %doc %{_mandir}/man1/xml2-config*
-%doc %{_mandir}/man3/*
 
 %if %{with compat32}
 %files -n %{lib32name}
@@ -286,5 +282,4 @@ rm -rf %{buildroot}%{_prefix}/doc %{buildroot}%{_datadir}/doc
 %{_prefix}/lib/libxml2.so
 %{_prefix}/lib/pkgconfig/*.pc
 %{_prefix}/lib/cmake/libxml2/libxml2-config.cmake
-%{_prefix}/lib/xml2Conf.sh
 %endif
