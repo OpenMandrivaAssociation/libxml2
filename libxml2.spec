@@ -35,8 +35,8 @@
 
 Summary:	Library providing XML and HTML support
 Name:		libxml2
-Version:	2.10.4
-Release:	2
+Version:	2.11.3
+Release:	1
 License:	MIT
 Group:		System/Libraries
 Url:		http://www.xmlsoft.org/
@@ -255,7 +255,6 @@ rm -rf %{buildroot}%{_prefix}/doc %{buildroot}%{_datadir}/doc
 
 %if %{with python}
 %files -n python-%{name}
-%doc python/TODO
 %doc python/tests/*.py
 %{py_platsitedir}/*.so
 %{py_puresitedir}/__pycache__
@@ -263,7 +262,7 @@ rm -rf %{buildroot}%{_prefix}/doc %{buildroot}%{_datadir}/doc
 %endif
 
 %files -n %{devname}
-%doc README* Copyright TODO
+%doc README* Copyright
 %doc doc/libxml2-api.xml.xz
 %doc %{_datadir}/gtk-doc/html/*
 %{_datadir}/aclocal/*
