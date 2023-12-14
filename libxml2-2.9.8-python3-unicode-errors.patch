@@ -1,15 +1,16 @@
-diff -up libxml2-2.11.2/python/libxml.c.2~ libxml2-2.11.2/python/libxml.c
---- libxml2-2.11.2/python/libxml.c.2~	2023-04-11 14:19:21.000000000 +0200
-+++ libxml2-2.11.2/python/libxml.c	2023-05-11 00:34:03.448340769 +0200
-@@ -1606,6 +1606,7 @@ libxml_xmlErrorFuncHandler(ATTRIBUTE_UNU
+diff --git a/python/libxml.c b/python/libxml.c
+index bf048006..5f42e5b7 100644
+--- a/python/libxml.c
++++ b/python/libxml.c
+@@ -1505,6 +1505,7 @@ libxml_xmlErrorFuncHandler(ATTRIBUTE_UNUSED void *ctx, const char *msg,
      PyObject *message;
      PyObject *result;
      char str[1000];
 +    unsigned char *ptr = (unsigned char *)str;
  
- #ifdef DEBUG_ERROR
-     printf("libxml_xmlErrorFuncHandler(%p, %s, ...) called\n", ctx, msg);
-@@ -1622,12 +1623,20 @@ libxml_xmlErrorFuncHandler(ATTRIBUTE_UNU
+     if (libxml_xmlPythonErrorFuncHandler == NULL) {
+         va_start(ap, msg);
+@@ -1516,12 +1517,20 @@ libxml_xmlErrorFuncHandler(ATTRIBUTE_UNUSED void *ctx, const char *msg,
  	    str[999] = 0;
          va_end(ap);
  
