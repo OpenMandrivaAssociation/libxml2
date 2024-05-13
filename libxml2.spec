@@ -35,11 +35,11 @@
 
 Summary:	Library providing XML and HTML support
 Name:		libxml2
-Version:	2.12.6
+Version:	2.12.7
 Release:	1
 License:	MIT
 Group:		System/Libraries
-Url:		http://www.xmlsoft.org/
+Url:		https://www.xmlsoft.org/
 Source0:	https://download.gnome.org/sources/libxml2/%(echo %{version}|cut -d. -f1-2)/libxml2-%{version}.tar.xz
 #Source0:	http://xmlsoft.org/sources/%{name}-%{version}.tar.gz
 Patch1:		libxml2-2.9.9-no-Lusrlib.patch
