@@ -3,9 +3,6 @@
 %global _disable_lto 1
 
 %bcond_without python
-%if %{with python}
-%global _disable_ld_no_undefined 1
-%endif
 
 # ICU support is needed in order for libreoffice, chromium, qtwebengine and
 # maybe others to use system libxml.
@@ -17,7 +14,8 @@
 %bcond_without pgo
 
 %define major 2
-%define libname %mklibname xml2_ %{major}
+%define oldlibname %mklibname xml2_ 2
+%define libname %mklibname xml2
 %define devname %mklibname xml2 -d
 # libxml2 is used by wine -- needs a 32-bit compat package
 %ifarch %{x86_64}
@@ -26,7 +24,8 @@
 %bcond_with compat32
 %endif
 %if %{with compat32}
-%define lib32name libxml2_%{major}
+%define oldlib32name libxml2_2
+%define lib32name libxml2
 %define dev32name libxml2-devel
 %endif
 
@@ -36,7 +35,7 @@
 Summary:	Library providing XML and HTML support
 Name:		libxml2
 Version:	2.12.10
-Release:	2
+Release:	3
 License:	MIT
 Group:		System/Libraries
 Url:		https://www.xmlsoft.org/
@@ -44,7 +43,7 @@ Source0:	https://download.gnome.org/sources/libxml2/%(echo %{version}|cut -d. -f
 #Source0:	http://xmlsoft.org/sources/%{name}-%{version}.tar.gz
 Patch1:		libxml2-2.9.9-no-Lusrlib.patch
 Patch2:		https://src.fedoraproject.org/rpms/libxml2/raw/rawhide/f/libxml2-2.9.8-python3-unicode-errors.patch
-BuildRequires:	gtk-doc
+BuildRequires:	cmake
 %if %{with python}
 BuildRequires:	pkgconfig(python3)
 BuildRequires:	gettext-devel
@@ -67,6 +66,10 @@ BuildRequires:	pkgconfig(icu-i18n)
 BuildRequires:	devel(libz)
 BuildRequires:	devel(liblzma)
 %endif
+%if "%{lib32name}" == "%{name}"
+# Renamed 2025-03-07 before 6.0
+%rename %{oldlib32name}
+%endif
 
 %description
 This library allows you to manipulate XML files. It includes support
@@ -82,8 +85,9 @@ and combined to a URI library.
 %package -n %{libname}
 Summary:	Shared libraries providing XML and HTML support
 Group:		System/Libraries
-Obsoletes:	%{mklibname xml 2} < 2.8.0
 Provides:	%{name} = %{EVRD}
+# Renamed 2025-03-07 before 6.0
+%rename %{oldlibname}
 
 %description -n %{libname}
 This library allows you to manipulate XML files. It includes support
@@ -112,15 +116,19 @@ support: this includes parsing and validation even with complex DtDs,
 either at parse time or later once the document has been modified.
 
 %if %{with compat32}
+%if "%{lib32name}" != "%{name}"
 %package -n %{lib32name}
 Summary:	Shared libraries providing XML and HTML support (32-bit)
 Group:		System/Libraries
+# Renamed 2025-03-07 before 6.0
+%rename %{oldlib32name}
 
 %description -n %{lib32name}
 This library allows you to manipulate XML files. It includes support
 for reading, modifying and writing XML and HTML files. There is DTDs
 support: this includes parsing and validation even with complex DtDs,
 either at parse time or later once the document has been modified.
+%endif
 
 %package -n %{dev32name}
 Summary:	Libraries, includes, etc. to develop XML and HTML applications (32-bit)
@@ -169,42 +177,50 @@ either at parse time or later once the document has been modified.
 
 %if %{with compat32}
 export CONFIGURE_TOP="$(pwd)"
-mkdir build32
-cd build32
-%configure32 \
-	--without-python \
-	--without-history \
-	--without-icu
+%cmake32 \
+	-G Ninja \
+	-DLIBXML2_WITH_PYTHON:BOOL=OFF \
+	-DLIBXML2_WITH_ICU:BOOL=OFF
+cd ..
 %endif
 
 %build
 %if %{with compat32}
-%make_build -C build32
+%ninja_build -C build32
 %endif
 
-export CONFIGURE_TOP="$(pwd)"
-mkdir build
-cd build
 %if %{with pgo}
-export LD_LIBRARY_PATH="$(pwd)"
+export LD_LIBRARY_PATH="$(pwd)/build"
 
 CFLAGS="%{optflags} -flto -fprofile-generate" \
 CXXFLAGS="%{optflags} -flto -fprofile-generate" \
 LDFLAGS="%{build_ldflags} -flto -fprofile-generate" \
-%configure --disable-static
-%make_build
+%cmake \
+	-G Ninja \
+%if !%{with python}
+	-DLIBXML2_WITH_PYTHON:BOOL=OFF \
+%endif
+%if %{with icu}
+	-DLIBXML2_WITH_ICU:BOOL=ON \
+%else
+	-DLIBXML2_WITH_ICU:BOOL=OFF \
+%endif
+	-DLIBXML2_WITH_TLS:BOOL=ON \
+	-DLIBXML2_WITH_THREAD_ALLOC:BOOL=ON
+cd ..
+%ninja_build -C build
 
-make dba100000.xml
-./xmllint --noout  dba100000.xml
-./xmllint --stream  dba100000.xml
-./xmllint --noout --valid ../test/valid/REC-xml-19980210.xml
-./xmllint --stream --valid ../test/valid/REC-xml-19980210.xml
+./dbgenattr.pl 100000 >dba100000.xml
+./build/xmllint --noout  dba100000.xml
+./build/xmllint --stream  dba100000.xml
+./build/xmllint --noout --valid test/valid/REC-xml-19980210.xml
+./build/xmllint --stream --valid test/valid/REC-xml-19980210.xml
 unset LD_LIBRARY_PATH
 llvm-profdata merge --output=%{name}-llvm.profdata $(find . -name "*.profraw" -type f)
 PROFDATA="$(realpath %{name}-llvm.profdata)"
 rm -f *.profraw
 
-make clean
+%ninja_build -C build clean
 
 CFLAGS="%{optflags} -flto -fprofile-use=$PROFDATA" \
 CXXFLAGS="%{optflags} -flto -fprofile-use=$PROFDATA" \
@@ -214,31 +230,36 @@ CFLAGS="%{optflags} -flto" \
 CXXFLAGS="%{optflags} -flto" \
 LDFLAGS="%{build_ldflags} -flto" \
 %endif
-%configure \
+%cmake \
+	-G Ninja \
 %if !%{with python}
-	--without-python \
-%endif
-	--disable-static \
-%if %{with icu}
-	--with-icu
+	-DLIBXML2_WITH_PYTHON:BOOL=OFF \
 %else
-	--without-icu
+	-DLIBXML2_PYTHON_INSTALL_DIR=%{py_platsitedir} \
 %endif
+%if %{with icu}
+	-DLIBXML2_WITH_ICU:BOOL=ON \
+%else
+	-DLIBXML2_WITH_ICU:BOOL=OFF \
+%endif
+	-DLIBXML2_WITH_TLS:BOOL=ON \
+	-DLIBXML2_WITH_THREAD_ALLOC:BOOL=ON
+cd ..
 
-%make_build
+%ninja_build -C build
 
-xz --text -T0 -c ../doc/libxml2-api.xml > ../doc/libxml2-api.xml.xz
+xz --text -T0 -c doc/libxml2-api.xml > doc/libxml2-api.xml.xz
 
 %install
 %if %{with compat32}
-%make_install -C build32
+%ninja_install -C build32
 %endif
-%make_install -C build
+%ninja_install -C build
 
 # remove unpackaged files
 rm -rf %{buildroot}%{_prefix}/doc %{buildroot}%{_datadir}/doc
 
-%check
+#check
 # all tests must pass
 # use TARBALLURL_2="" TARBALLURL="" TESTDIRS="" to disable xstc test which are using remote tarball
 # Currently (2.9.4-1) disabled because it freezes some build machines
@@ -256,18 +277,16 @@ rm -rf %{buildroot}%{_prefix}/doc %{buildroot}%{_datadir}/doc
 %if %{with python}
 %files -n python-%{name}
 %doc python/tests/*.py
-%{py_platsitedir}/*.so
-%{py_puresitedir}/__pycache__
-%{py_puresitedir}/*.py
+%{py_platsitedir}/*.so*
+%{py_platsitedir}/*.py
 %endif
 
 %files -n %{devname}
 %doc README* Copyright
 %doc doc/libxml2-api.xml.xz
-%doc %{_datadir}/gtk-doc/html/*
 %{_datadir}/aclocal/*
 %{_bindir}/xml2-config
-%{_libdir}/cmake/libxml2/libxml2-config.cmake
+%{_libdir}/cmake/libxml2*
 %{_libdir}/libxml2.so
 %{_libdir}/pkgconfig/*
 %{_includedir}/*
@@ -280,5 +299,5 @@ rm -rf %{buildroot}%{_prefix}/doc %{buildroot}%{_datadir}/doc
 %files -n %{dev32name}
 %{_prefix}/lib/libxml2.so
 %{_prefix}/lib/pkgconfig/*.pc
-%{_prefix}/lib/cmake/libxml2/libxml2-config.cmake
+%{_prefix}/lib/cmake/libxml2*
 %endif
