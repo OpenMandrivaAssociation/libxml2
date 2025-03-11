@@ -35,7 +35,7 @@
 Summary:	Library providing XML and HTML support
 Name:		libxml2
 Version:	2.12.10
-Release:	3
+Release:	4
 License:	MIT
 Group:		System/Libraries
 Url:		https://www.xmlsoft.org/
@@ -180,7 +180,9 @@ export CONFIGURE_TOP="$(pwd)"
 %cmake32 \
 	-G Ninja \
 	-DLIBXML2_WITH_PYTHON:BOOL=OFF \
-	-DLIBXML2_WITH_ICU:BOOL=OFF
+	-DLIBXML2_WITH_ICU:BOOL=OFF \
+	-DLIBXML2_WITH_TLS:BOOL=ON \
+	-DLIBXML2_WITH_THREAD_ALLOC:BOOL=ON
 cd ..
 %endif
 
