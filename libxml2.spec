@@ -35,7 +35,7 @@
 Summary:	Library providing XML and HTML support
 Name:		libxml2
 Version:	2.12.10
-Release:	5
+Release:	6
 License:	MIT
 Group:		System/Libraries
 Url:		https://www.xmlsoft.org/
@@ -85,7 +85,6 @@ and combined to a URI library.
 %package -n %{libname}
 Summary:	Shared libraries providing XML and HTML support
 Group:		System/Libraries
-Provides:	%{name} = %{EVRD}
 # Renamed 2025-03-07 before 6.0
 %rename %{oldlibname}
 
