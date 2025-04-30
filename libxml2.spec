@@ -211,7 +211,7 @@ LDFLAGS="%{build_ldflags} -flto -fprofile-generate" \
 cd ..
 %ninja_build -C build
 
-./dbgenattr.pl 100000 >dba100000.xml
+#./dbgenattr.pl 100000 >dba100000.xml
 ./build/xmllint --noout  dba100000.xml
 ./build/xmllint --stream  dba100000.xml
 ./build/xmllint --noout --valid test/valid/REC-xml-19980210.xml
