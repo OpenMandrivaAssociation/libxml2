@@ -11,7 +11,7 @@
 %bcond_without icu
 
 # (tpg) enable PGO build
-%bcond_without pgo
+%bcond_with pgo
 
 %define major 2
 %define oldlibname %mklibname xml2_ 2
