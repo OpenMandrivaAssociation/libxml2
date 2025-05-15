@@ -13,7 +13,7 @@
 # (tpg) enable PGO build
 %bcond_with pgo
 
-%define major 2
+%define major 16
 %define oldlibname %mklibname xml2_ 2
 %define libname %mklibname xml2
 %define devname %mklibname xml2 -d
