@@ -216,10 +216,10 @@ cd ..
 #./build/xmllint --stream  dba100000.xml
 #./build/xmllint --noout --valid test/valid/REC-xml-19980210.xml
 #./build/xmllint --stream --valid test/valid/REC-xml-19980210.xml
-unset LD_LIBRARY_PATH
-llvm-profdata merge --output=%{name}-llvm.profdata $(find . -name "*.profraw" -type f)
-PROFDATA="$(realpath %{name}-llvm.profdata)"
-rm -f *.profraw
+#unset LD_LIBRARY_PATH
+#llvm-profdata merge --output=%{name}-llvm.profdata $(find . -name "*.profraw" -type f)
+#PROFDATA="$(realpath %{name}-llvm.profdata)"
+#rm -f *.profraw
 
 %ninja_build -C build clean
 
