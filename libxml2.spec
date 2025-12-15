@@ -251,7 +251,7 @@ cd ..
 
 %ninja_build -C build
 
-xz --text -T0 -c doc/libxml2-api.xml > doc/libxml2-api.xml.xz
+#xz --text -T0 -c doc/libxml2-api.xml > doc/libxml2-api.xml.xz
 
 %install
 %if %{with compat32}
