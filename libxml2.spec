@@ -286,14 +286,14 @@ rm -rf %{buildroot}%{_prefix}/doc %{buildroot}%{_datadir}/doc
 
 %files -n %{devname}
 %doc README* Copyright
-%doc doc/libxml2-api.xml.xz
+#doc doc/libxml2-api.xml.xz
 #{_datadir}/aclocal/*
 %{_bindir}/xml2-config
 %{_libdir}/cmake/libxml2*
 %{_libdir}/libxml2.so
 %{_libdir}/pkgconfig/*
 %{_includedir}/*
-%doc %{_mandir}/man1/xml2-config*
+#doc %{_mandir}/man1/xml2-config*
 
 %if %{with compat32}
 %files -n %{lib32name}
