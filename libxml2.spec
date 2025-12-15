@@ -274,8 +274,8 @@ rm -rf %{buildroot}%{_prefix}/doc %{buildroot}%{_datadir}/doc
 %files utils
 %{_bindir}/xmlcatalog
 %{_bindir}/xmllint
-%doc %{_mandir}/man1/xmlcatalog*
-%doc %{_mandir}/man1/xmllint*
+#doc %{_mandir}/man1/xmlcatalog*
+#doc %{_mandir}/man1/xmllint*
 
 %if %{with python}
 %files -n python-%{name}
