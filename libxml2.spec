@@ -44,6 +44,8 @@ Source0:	https://download.gnome.org/sources/libxml2/%(echo %{version}|cut -d. -f
 Patch1:		libxml2-2.9.9-no-Lusrlib.patch
 Patch2:		https://src.fedoraproject.org/rpms/libxml2/raw/rawhide/f/libxml2-2.9.8-python3-unicode-errors.patch
 BuildRequires:	cmake ninja
+BuildRequires:	doxygen
+BuildRequires:	xsltproc
 %if %{with python}
 BuildRequires:	pkgconfig(python3)
 BuildRequires:	gettext-devel
