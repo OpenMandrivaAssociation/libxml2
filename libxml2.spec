@@ -202,6 +202,8 @@ LDFLAGS="%{build_ldflags} -flto -fprofile-generate" \
 	-G Ninja \
 %if !%{with python}
 	-DLIBXML2_WITH_PYTHON:BOOL=OFF \
+%else
+	-DLIBXML2_WITH_PYTHON:BOOL=ON \
 %endif
 %if %{with icu}
 	-DLIBXML2_WITH_ICU:BOOL=ON \
@@ -238,6 +240,7 @@ LDFLAGS="%{build_ldflags} -flto" \
 %if !%{with python}
 	-DLIBXML2_WITH_PYTHON:BOOL=OFF \
 %else
+	-DLIBXML2_WITH_PYTHON:BOOL=ON \
 	-DLIBXML2_PYTHON_INSTALL_DIR=%{py_platsitedir} \
 %endif
 %if %{with icu}
