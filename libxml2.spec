@@ -283,8 +283,8 @@ rm -rf %{buildroot}%{_prefix}/doc %{buildroot}%{_datadir}/doc
 %if %{with python}
 %files -n python-%{name}
 %doc python/tests/*.py
-#{py_platsitedir}/*.so*
-#{py_platsitedir}/*.py
+%{py_platsitedir}/*.so*
+%{py_platsitedir}/*.py
 %endif
 
 %files -n %{devname}
