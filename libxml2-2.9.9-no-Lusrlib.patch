@@ -1,7 +1,7 @@
-diff -up libxml2-2.9.9/python/setup.py.in.omv~ libxml2-2.9.9/python/setup.py.in
---- libxml2-2.9.9/python/setup.py.in.omv~	2019-10-20 01:29:53.003584609 +0200
-+++ libxml2-2.9.9/python/setup.py.in	2019-10-20 01:30:01.736624520 +0200
-@@ -85,7 +85,7 @@ if iconv_includes == "":
+diff -uraN libxml2-2.15.1/python/setup.py.in omv-libxml2-2.15.1/python/setup.py.in
+--- libxml2-2.15.1/python/setup.py.in	2025-10-16 17:49:18.000000000 +0200
++++ omv-libxml2-2.15.1/python/setup.py.in	2025-12-16 00:28:10.594168182 +0100
+@@ -92,7 +92,7 @@
  
  # those are added in the linker search path for libraries
  libdirs = [
@@ -9,4 +9,4 @@ diff -up libxml2-2.9.9/python/setup.py.in.omv~ libxml2-2.9.9/python/setup.py.in
 +# os.path.join(ROOT,'lib'), -L/usr/lib is EVIL
  ]
  
- xml_files = ["libxml2-api.xml", "libxml2-python-api.xml",
+ xml_files = ["libxml.c", "libxml.py", "libxml_wrap.h", "types.c",

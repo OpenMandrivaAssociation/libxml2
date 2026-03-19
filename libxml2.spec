@@ -11,9 +11,9 @@
 %bcond_without icu
 
 # (tpg) enable PGO build
-%bcond_without pgo
+%bcond_with pgo
 
-%define major 2
+%define major 16
 %define oldlibname %mklibname xml2_ 2
 %define libname %mklibname xml2
 %define devname %mklibname xml2 -d
@@ -34,8 +34,8 @@
 
 Summary:	Library providing XML and HTML support
 Name:		libxml2
-Version:	2.13.8
-Release:	3
+Version:	2.15.2
+Release:	1
 License:	MIT
 Group:		System/Libraries
 Url:		https://www.xmlsoft.org/
@@ -44,6 +44,8 @@ Source0:	https://download.gnome.org/sources/libxml2/%(echo %{version}|cut -d. -f
 Patch1:		libxml2-2.9.9-no-Lusrlib.patch
 Patch2:		https://src.fedoraproject.org/rpms/libxml2/raw/rawhide/f/libxml2-2.9.8-python3-unicode-errors.patch
 BuildRequires:	cmake ninja
+BuildRequires:	doxygen
+BuildRequires:	xsltproc
 %if %{with python}
 BuildRequires:	pkgconfig(python3)
 BuildRequires:	gettext-devel
@@ -200,6 +202,8 @@ LDFLAGS="%{build_ldflags} -flto -fprofile-generate" \
 	-G Ninja \
 %if !%{with python}
 	-DLIBXML2_WITH_PYTHON:BOOL=OFF \
+%else
+	-DLIBXML2_WITH_PYTHON:BOOL=ON \
 %endif
 %if %{with icu}
 	-DLIBXML2_WITH_ICU:BOOL=ON \
@@ -211,15 +215,15 @@ LDFLAGS="%{build_ldflags} -flto -fprofile-generate" \
 cd ..
 %ninja_build -C build
 
-./dbgenattr.pl 100000 >dba100000.xml
-./build/xmllint --noout  dba100000.xml
-./build/xmllint --stream  dba100000.xml
-./build/xmllint --noout --valid test/valid/REC-xml-19980210.xml
-./build/xmllint --stream --valid test/valid/REC-xml-19980210.xml
-unset LD_LIBRARY_PATH
-llvm-profdata merge --output=%{name}-llvm.profdata $(find . -name "*.profraw" -type f)
-PROFDATA="$(realpath %{name}-llvm.profdata)"
-rm -f *.profraw
+#./dbgenattr.pl 100000 >dba100000.xml
+#./build/xmllint --noout  dba100000.xml
+#./build/xmllint --stream  dba100000.xml
+#./build/xmllint --noout --valid test/valid/REC-xml-19980210.xml
+#./build/xmllint --stream --valid test/valid/REC-xml-19980210.xml
+#unset LD_LIBRARY_PATH
+#llvm-profdata merge --output=%{name}-llvm.profdata $(find . -name "*.profraw" -type f)
+#PROFDATA="$(realpath %{name}-llvm.profdata)"
+#rm -f *.profraw
 
 %ninja_build -C build clean
 
@@ -236,6 +240,7 @@ LDFLAGS="%{build_ldflags} -flto" \
 %if !%{with python}
 	-DLIBXML2_WITH_PYTHON:BOOL=OFF \
 %else
+	-DLIBXML2_WITH_PYTHON:BOOL=ON \
 	-DLIBXML2_PYTHON_INSTALL_DIR=%{py_platsitedir} \
 %endif
 %if %{with icu}
@@ -249,7 +254,7 @@ cd ..
 
 %ninja_build -C build
 
-xz --text -T0 -c doc/libxml2-api.xml > doc/libxml2-api.xml.xz
+#xz --text -T0 -c doc/libxml2-api.xml > doc/libxml2-api.xml.xz
 
 %install
 %if %{with compat32}
@@ -272,8 +277,8 @@ rm -rf %{buildroot}%{_prefix}/doc %{buildroot}%{_datadir}/doc
 %files utils
 %{_bindir}/xmlcatalog
 %{_bindir}/xmllint
-%doc %{_mandir}/man1/xmlcatalog*
-%doc %{_mandir}/man1/xmllint*
+#doc %{_mandir}/man1/xmlcatalog*
+#doc %{_mandir}/man1/xmllint*
 
 %if %{with python}
 %files -n python-%{name}
@@ -284,14 +289,14 @@ rm -rf %{buildroot}%{_prefix}/doc %{buildroot}%{_datadir}/doc
 
 %files -n %{devname}
 %doc README* Copyright
-%doc doc/libxml2-api.xml.xz
-%{_datadir}/aclocal/*
+#doc doc/libxml2-api.xml.xz
+#{_datadir}/aclocal/*
 %{_bindir}/xml2-config
 %{_libdir}/cmake/libxml2*
 %{_libdir}/libxml2.so
 %{_libdir}/pkgconfig/*
 %{_includedir}/*
-%doc %{_mandir}/man1/xml2-config*
+#doc %{_mandir}/man1/xml2-config*
 
 %if %{with compat32}
 %files -n %{lib32name}
