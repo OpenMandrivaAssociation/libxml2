@@ -1,5 +1,5 @@
 # disable_lto is a workaround for unresolved symbols in the 32bit library.
-# We add -flto manually after building the 32bit package, so nothing lost.
+# 64-bit LTO is added via optflags; cmake32 strips -flto.
 %global _disable_lto 1
 
 %bcond_without python
@@ -10,8 +10,8 @@
 # packages that rely on it.
 %bcond_without icu
 
-# (tpg) enable PGO build
-%bcond_with pgo
+# %pgo trains the 64-bit library. --without pgo skips the two-pass build.
+%bcond_without pgo
 
 %define major 16
 %define oldlibname %mklibname xml2_ 2
@@ -29,13 +29,13 @@
 %define dev32name libxml2-devel
 %endif
 
-# (tpg) optimize it a bit
-%global optflags %{optflags} -O3
+# (tpg) optimize it a bit. -flto is stripped again for cmake32.
+%global optflags %{optflags} -O3 -flto
 
 Summary:	Library providing XML and HTML support
 Name:		libxml2
 Version:	2.15.4
-Release:	1
+Release:	2
 License:	MIT
 Group:		System/Libraries
 Url:		https://www.xmlsoft.org/
@@ -67,6 +67,13 @@ BuildRequires:	pkgconfig(icu-i18n)
 # LibreOffice - neither of which is relevant to wine.
 BuildRequires:	devel(libz)
 BuildRequires:	devel(liblzma)
+# clang -m32 reads i386-*.cfg. The i686-openmandriva target has
+# libclang_rt.builtins.a and the sysroot lld needs.
+BuildRequires:	cross-i686-openmandriva-linux-gnu-clang
+BuildRequires:	cross-i686-openmandriva-linux-gnu-libc
+BuildRequires:	cross-i686-openmandriva-linux-gnu-gcc
+BuildRequires:	cross-i686-openmandriva-linux-gnu-binutils
+BuildRequires:	cross-i686-openmandriva-linux-gnu-kernel-headers
 %endif
 %if "%{lib32name}" == "%{name}"
 # Renamed 2025-03-07 before 6.0
@@ -176,8 +183,18 @@ either at parse time or later once the document has been modified.
 %prep
 %autosetup -p1
 
+# cmake32 stays in %prep so it never sees the PGO CFLAGS rpm injects
+# around %build. 64-bit objects go in _OMV_rpm_build so the PGO wipe
+# leaves the 32-bit tree alone.
 %if %{with compat32}
 export CONFIGURE_TOP="$(pwd)"
+# clang -m32 uses i386-pc-linux-gnu (builtins only).
+# --target=i686-openmandriva-linux-gnu finds libclang_rt.builtins.a
+# and the matching sysroot.
+CFLAGS32="$(echo "${CFLAGS:-%{optflags}}" | sed -e 's/ -m64//g;s/ -mx32//g;s/ -flto//g;s/ -fprofile-[^ ]*//g;s/ -Wno-missing-profile//g') -m32 --target=i686-openmandriva-linux-gnu"
+CXXFLAGS32="$(echo "${CXXFLAGS:-%{optflags}}" | sed -e 's/ -m64//g;s/ -mx32//g;s/ -flto//g;s/ -fprofile-[^ ]*//g;s/ -Wno-missing-profile//g') -m32 --target=i686-openmandriva-linux-gnu"
+LDFLAGS32="$(echo "${LDFLAGS:-%{build_ldflags}}" | sed -e 's/ -m64//g;s/ -mx32//g;s/ -flto//g;s/ -fprofile-[^ ]*//g;s/ -Wno-missing-profile//g') -m32 --target=i686-openmandriva-linux-gnu"
+export CFLAGS32 CXXFLAGS32 LDFLAGS32
 %cmake32 \
 	-G Ninja \
 	-DLIBXML2_WITH_PYTHON:BOOL=OFF \
@@ -192,49 +209,9 @@ cd ..
 %ninja_build -C build32
 %endif
 
-%if %{with pgo}
-export LD_LIBRARY_PATH="$(pwd)/build"
-
-CFLAGS="%{optflags} -flto -fprofile-generate" \
-CXXFLAGS="%{optflags} -flto -fprofile-generate" \
-LDFLAGS="%{build_ldflags} -flto -fprofile-generate" \
-%cmake \
-	-G Ninja \
-%if !%{with python}
-	-DLIBXML2_WITH_PYTHON:BOOL=OFF \
-%else
-	-DLIBXML2_WITH_PYTHON:BOOL=ON \
-%endif
-%if %{with icu}
-	-DLIBXML2_WITH_ICU:BOOL=ON \
-%else
-	-DLIBXML2_WITH_ICU:BOOL=OFF \
-%endif
-	-DLIBXML2_WITH_TLS:BOOL=ON \
-	-DLIBXML2_WITH_THREAD_ALLOC:BOOL=ON
-cd ..
-%ninja_build -C build
-
-#./dbgenattr.pl 100000 >dba100000.xml
-#./build/xmllint --noout  dba100000.xml
-#./build/xmllint --stream  dba100000.xml
-#./build/xmllint --noout --valid test/valid/REC-xml-19980210.xml
-#./build/xmllint --stream --valid test/valid/REC-xml-19980210.xml
-#unset LD_LIBRARY_PATH
-#llvm-profdata merge --output=%{name}-llvm.profdata $(find . -name "*.profraw" -type f)
-#PROFDATA="$(realpath %{name}-llvm.profdata)"
-#rm -f *.profraw
-
-%ninja_build -C build clean
-
-CFLAGS="%{optflags} -flto -fprofile-use=$PROFDATA" \
-CXXFLAGS="%{optflags} -flto -fprofile-use=$PROFDATA" \
-LDFLAGS="%{build_ldflags} -flto -fprofile-use=$PROFDATA" \
-%else
-CFLAGS="%{optflags} -flto" \
-CXXFLAGS="%{optflags} -flto" \
-LDFLAGS="%{build_ldflags} -flto" \
-%endif
+# Out-of-tree name rpm's %pgo wipe recognizes, so pass 2 does not
+# re-extract sources or rebuild the 32-bit library.
+export CMAKE_BUILD_DIR=_OMV_rpm_build
 %cmake \
 	-G Ninja \
 %if !%{with python}
@@ -252,15 +229,88 @@ LDFLAGS="%{build_ldflags} -flto" \
 	-DLIBXML2_WITH_THREAD_ALLOC:BOOL=ON
 cd ..
 
-%ninja_build -C build
+%ninja_build -C _OMV_rpm_build
 
-#xz --text -T0 -c doc/libxml2-api.xml > doc/libxml2-api.xml.xz
+# Typical well-formed traffic (config / appstream / HTML / the XML spec).
+# The test suite overweights error paths and is a poor PGO profile.
+# --repeat is xmllint's own 100-iteration timing/profiling loop.
+%if %{with pgo}
+%pgo
+export LLVM_PROFILE_FILE="%{_pgo_profile_dir}/libxml2-%%m-%%p.profraw"
+export LD_LIBRARY_PATH="$(pwd)/_OMV_rpm_build${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+xml=./_OMV_rpm_build/xmllint
+catlg=./_OMV_rpm_build/xmlcatalog
+[ -x "$xml" ] || { echo "PGO: instrumented xmllint missing"; exit 1; }
+
+train=pgo-train
+mkdir -p "$train"
+cat > "$train/config.xml" <<'EOF'
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<server host="localhost" port="8080" ssl="false">
+		<timeout>30</timeout>
+		<workers>8</workers>
+		<listen address="::" backlog="128"/>
+	</server>
+	<log level="info" path="/var/log/app.log"/>
+	<users>
+		<user id="1" name="root" enabled="true"><email>root@example.com</email></user>
+		<user id="2" name="alice" enabled="true"><email>alice@example.com</email></user>
+		<user id="3" name="café" enabled="false"><email>cafe@example.com</email></user>
+	</users>
+</configuration>
+EOF
+cat > "$train/appstream.xml" <<'EOF'
+<?xml version="1.0" encoding="UTF-8"?>
+<components version="0.14" origin="openmandriva">
+	<component type="desktop-application">
+		<id>org.example.App</id>
+		<name>Example App</name>
+		<summary>A typical desktop application</summary>
+		<description><p>Short description with <em>inline</em> markup and UTF-8 café.</p></description>
+		<url type="homepage">https://example.com/</url>
+		<provides><binary>example</binary></provides>
+		<releases>
+			<release version="1.2.3" date="2026-08-01"/>
+			<release version="1.2.2" date="2026-07-01"/>
+		</releases>
+	</component>
+</components>
+EOF
+{
+	echo '<?xml version="1.0" encoding="UTF-8"?>'
+	echo '<catalog>'
+	i=0
+	while [ $i -lt 4000 ]; do
+		echo "<item id=\"$i\" name=\"entry-$i\" enabled=\"true\"><title>Item $i</title><desc>Typical text for item $i (café 日本語)</desc><meta k=\"v$i\"/></item>"
+		i=$((i + 1))
+	done
+	echo '</catalog>'
+} > "$train/large.xml"
+
+"$xml" --nonet --repeat --noout "$train/config.xml" "$train/appstream.xml" "$train/large.xml"
+"$xml" --nonet --repeat --stream --noout "$train/large.xml" test/valid/REC-xml-19980210.xml
+"$xml" --nonet --repeat --memory --noout "$train/large.xml"
+"$xml" --nonet --repeat --push --noout "$train/config.xml"
+"$xml" --nonet --repeat --valid --noout test/valid/REC-xml-19980210.xml
+"$xml" --nonet --repeat --stream --valid --noout test/valid/REC-xml-19980210.xml
+"$xml" --nonet --repeat --html --nowarning --noout test/HTML/Down.html test/HTML/attr-ents.html
+"$xml" --nonet --html --recover --nowarning --noout test/HTML/wired.html || :
+"$xml" --nonet --xpath '//item/@id' "$train/large.xml" >/dev/null
+"$xml" --nonet --c14n "$train/config.xml" >/dev/null
+"$xml" --nonet --format --encode UTF-8 -o /dev/null "$train/large.xml"
+if [ -x "$catlg" ]; then
+	"$catlg" --create --noout "$train/catalog.xml"
+	"$catlg" --noout --add public "-//Example//DTD Config 1.0//EN" "config.dtd" "$train/catalog.xml"
+	"$catlg" "$train/catalog.xml" "-//Example//DTD Config 1.0//EN" >/dev/null
+fi
+%endif
 
 %install
 %if %{with compat32}
 %ninja_install -C build32
 %endif
-%ninja_install -C build
+%ninja_install -C _OMV_rpm_build
 
 # remove unpackaged files
 rm -rf %{buildroot}%{_prefix}/doc %{buildroot}%{_datadir}/doc
